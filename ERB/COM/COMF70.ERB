@@ -1,0 +1,225 @@
+@COM70
+;名前を刻む
+
+DRAWLINE
+FONTSTYLE 1
+PRINTL ※ 注意 ※
+FONTSTYLE 0
+PRINTL このコマンドはかなりの体力と気力を消費し、奴隷の首に名前を刻みます。
+PRINTL 刻んだ対象(助手プレイ時は助手)以外からの調教が実行しづらくなります。
+PRINTL また、烙印が刻まれた奴隷は売却不可能になります。それでも実行しますか？
+DRAWLINE
+PRINTL [0] - 実行する
+PRINTL [1] - 実行しない
+DRAWLINE
+
+$INPUT_LOOP
+INPUT
+IF RESULT == 1
+	RETURN 0
+ELSEIF RESULT != 0
+	GOTO INPUT_LOOP
+ENDIF
+
+;-------------------------------------------------
+;実行できるかの判定
+;-------------------------------------------------
+A = 0
+S = 0
+
+;すべての命令に共通の要素を考慮
+CALL COM_ORDER
+
+;ABL:欲望
+IF ABL:1
+	SIF S
+		PRINT  + 
+	A += ABL:1 * 2
+	PRINTS ABLNAME:1
+	PRINTV 'LV,ABL:1,'(,ABL:1 * 2,')
+	S = 1
+ENDIF
+
+;ABL:奉仕精神
+IF ABL:6
+	SIF S
+		PRINT  + 
+	A += ABL:6 * 4
+	PRINTS ABLNAME:6
+	PRINTV 'LV,ABL:6,'(,ABL:6 * 4,')
+	S = 1
+ENDIF
+
+;苦痛刻印
+IF MARK:0
+	SIF S
+		PRINT  + 
+	A += MARK:0 * 4
+	PRINTS MARKNAME:0
+	PRINTV 'LV,MARK:0,'(,MARK:0 * 2,')
+	S = 1
+ENDIF
+
+;屈服刻印
+IF MARK:2
+	SIF S
+		PRINT  + 
+	A += MARK:2 * 4
+	PRINTS MARKNAME:2
+	PRINTV 'LV,MARK:2,'(,MARK:2 * 2,')
+	S = 1
+ENDIF
+
+;快楽刻印
+IF MARK:1
+	SIF S
+		PRINT  + 
+	A += MARK:1 * 2
+	PRINTS MARKNAME:1
+	PRINTV 'LV,MARK:1,'(,MARK:1 * 2,')
+	S = 1
+ENDIF
+
+
+;PALAM:欲情
+IF PALAM:5 < PALAMLV:1
+	L = 0
+ELSEIF PALAM:5 < PALAMLV:2
+	L = 1
+ELSEIF PALAM:5 < PALAMLV:3
+	L = 2
+ELSEIF PALAM:5 < PALAMLV:4
+	L = 3
+ELSEIF PALAM:5 < PALAMLV:5
+	L = 4
+ELSE
+	L = 5
+ENDIF
+IF L
+	SIF S
+		PRINT  + 
+	A += L * 2
+	PRINTS PALAMNAME:5
+	PRINTV 'LV,L,'(,L * 2,')
+	S = 1
+ENDIF
+
+;恥じらい
+IF TALENT:35
+	PRINT  - 
+	A -= 1
+	PRINTS TALENTNAME:35
+	PRINTV '(,1,')
+	S = 1
+ENDIF
+;献身的
+IF TALENT:63
+	SIF S
+		PRINT  + 
+	A += 6
+	PRINTS TALENTNAME:63
+	PRINTV '(,6,')
+	S = 1
+ENDIF
+;快感に素直
+IF TALENT:71
+	SIF S
+		PRINT  + 
+	A += 2
+	PRINTS TALENTNAME:71
+	PRINTV '(,2,')
+	S = 1
+ENDIF
+;快感の否定
+IF TALENT:71
+	PRINT  - 
+	A -= 2
+	PRINTS TALENTNAME:71
+	PRINTV '(,2,')
+	S = 1
+ENDIF
+;恋慕
+IF TALENT:85 && ASSIPLAY == 0
+	SIF S
+		PRINT  + 
+	A += 5
+	PRINTS TALENTNAME:85
+	PRINTV '(,5,')
+	S = 1
+ENDIF
+
+;合計を表示(150以上で実行)
+PRINT  = 
+PRINTV A
+
+V = 150
+SIF A < V
+	PRINT  < 
+SIF A == V
+	PRINT  = 
+SIF A > V
+	PRINT  > 
+PRINT 実行値
+PRINTV V
+
+WAIT
+
+;実行できない
+IF A < V
+	CALL DISPLAY_KOJO_DENIAL_MESSAGE_COM, 70
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;実行決定
+;-------------------------------------------------
+TSTR:0 = 烙印を刻む
+CALL DISPLAY_KOJO_TRAIN_MESSAGE_F_COM
+;-------------------------------------------------
+;ソースの計算
+;-------------------------------------------------
+LOSEBASE:0 += 1000
+LOSEBASE:1 += 1200
+
+SOURCE:3 = 2000
+SOURCE:5 = 1000
+SOURCE:6 = 5000
+SOURCE:13 = 10000
+SOURCE:14 = 2000
+
+;PLAYERの ABL:技巧をみる
+IF ABL:PLAYER:2 == 0
+	TIMES SOURCE:6 , 4.00
+	TIMES SOURCE:14 , 4.00
+ELSEIF ABL:PLAYER:2 == 1
+	TIMES SOURCE:6 , 2.00
+	TIMES SOURCE:14 , 2.00
+ELSEIF ABL:PLAYER:2 == 2
+	TIMES SOURCE:6 , 1.50
+	TIMES SOURCE:14 , 1.50
+ELSEIF ABL:PLAYER:2 == 3
+	TIMES SOURCE:6 , 1.25
+	TIMES SOURCE:14 , 1.25
+ELSEIF ABL:PLAYER:2 == 4
+	TIMES SOURCE:6 , 1.00
+	TIMES SOURCE:14 , 1.00
+ELSE
+	TIMES SOURCE:6 , 0.75
+	TIMES SOURCE:14 , 0.75
+ENDIF
+
+;---------------------------------------------------------------
+;烙印処理
+;---------------------------------------------------------------
+
+TALENT:89 = 1
+CFLAG:789 = PLAYER
+
+REPEAT CHARANUM
+	RELATION:TARGET:(NO:COUNT) = 1
+REND
+
+RELATION:TARGET:(NO:PLAYER) = 400
+
+RETURN 1
+

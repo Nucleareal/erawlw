@@ -1,0 +1,76 @@
+@EVENTTURNEND
+#PRI
+;売却や助手化が可能になったか
+
+SIF ABL:0+ABL:1 < 6
+	RETURN 0
+SIF ABL:3 < 3 && ABL:4 < 3 && ABL:5 < 3
+	RETURN 0
+SIF ABL:0 < 4 && (TALENT:11 || TALENT:12)
+	RETURN 0
+SIF ABL:1 < 4 && (TALENT:20 || TALENT:32 || TALENT:34)
+	RETURN 0
+	
+SIF ABL:89
+	RETURN 0
+
+S = 0
+SIF (ABL:2 >= 3 && ABL:6 >= 3) || (ABL:7 >= 3 && ABL:10 >= 2) || ABL:8 >= 3 || (ABL:3+ABL:4+ABL:5 >= 10) || ABL:0 == 5 || ABL:1 == 5
+	S = 1
+SIF S == 0
+	RETURN 0
+
+PRINTFORML [0]調教を継続する
+PRINTFORML [1]%NAME:TARGET%を売る
+
+CALL JUDGE_ABLE_ASSI, TARGET
+
+IF RESULT
+	PRINTFORML [2]%NAME:TARGET%を助手にする
+	A = 1
+ENDIF
+
+$INPUT_LOOP
+INPUT
+
+SIF RESULT < 0 || RESULT > 2
+	GOTO INPUT_LOOP
+SIF RESULT == 2 && A == 0
+	GOTO INPUT_LOOP
+
+SIF RESULT == 0
+	RETURN 0
+
+;助手にする
+IF RESULT == 2
+	;既に助手がいる
+	IF ASSI >= 0
+		;調教対象をTに
+		T = TARGET
+		
+		;ターゲットを助手に
+		TARGET = ASSI
+		
+		;助手をTに
+		ASSI = T
+		
+		;要するに交換
+	;助手がいない
+	ELSE
+		;助手があなたでない
+		IF ASSI < 0
+			ASSI = TARGET
+			TARGET = -1
+		ENDIF
+	ENDIF
+
+	ISASSI:ASSI = 1
+
+	RETURN 0
+;売却する
+ELSE
+	T = -1
+	CALL SALE_CONFIRM, TARGET
+ENDIF
+
+CALL PASSIVE_TURNEND

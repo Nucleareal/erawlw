@@ -1,0 +1,56 @@
+;≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+;システムに深くかかわる処理等
+;≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+;=============================================================================
+;タイトルの処理
+;=============================================================================
+@SYSTEM_TITLE
+
+#DIM MENU_LENGTH, 1
+
+DRAWLINE
+ALIGNMENT CENTER
+FONTBOLD
+
+PRINTFORML %GAMEBASE_TITLE% ver.%DISPLAY_GAMEVERSION(GAMEBASE_VERSION)%
+
+FONTREGULAR
+
+PRINTFORML 作成者：%GAMEBASE_AUTHOR%
+
+PRINTL 
+PRINTL ※当バリアントは調教SLG作成ツールerakanonを改変・再配布したものです。
+PRINTL ※18才未満または社会的常識に基づいた行動がとれない方はプレイしないで下さい。
+DRAWLINE
+
+MENU_LENGTH = 22
+PRINTFORML % "[0] ロードしてはじめる", MENU_LENGTH, LEFT %
+PRINTFORML % "[1] 最初からはじめる", MENU_LENGTH, LEFT %
+PRINTFORML % "[9] ゲームを終了する", MENU_LENGTH, LEFT %
+ALIGNMENT LEFT
+$INPUT_LOOP
+INPUT
+IF RESULT == 0
+	LOADGAME
+ELSEIF RESULT == 1
+	RESETDATA
+	ADDCHARA 0
+	BEGIN FIRST
+ELSEIF RESULT == 9
+	CLEARLINE 1
+	PRINTFORMW %GAMEBASE_TITLE%を終了します
+	QUIT
+ELSE
+	CLEARLINE 1
+	REUSELASTLINE  
+	GOTO INPUT_LOOP
+ENDIF
+RESTART
+
+;--------------------------------------------------
+;ゲームバージョンの表示
+;--------------------------------------------------
+@DISPLAY_GAMEVERSION(ARG)
+#LOCALSIZE 1
+#FUNCTIONS
+RETURNF @"{ARG/1000}.{(ARG%1000)/100}{(ARG%100)/10}{ARG%10}"

@@ -1,0 +1,168 @@
+@CAN_CHARACTER_MENSTRUATION_CHECK(ARG)
+#FUNCTION
+;生理モードが有効ではない
+SIF MENSTRUATION_AVAILABLE == 0
+	RETURNF 0
+
+;オトコは生理が来ない(悲しい)
+SIF TALENT:ARG:122
+	RETURNF 0
+
+;発情できるキャラなら生理ではない
+SIF CHARACTER_RUT_TYPE(ARG:0)
+	RETURNF 0
+
+RETURNF 1
+
+
+
+; 生理かどうか(1=生理中, -1=排卵日周辺, 0=平常時)
+;
+; 505: 経過日数(Initial with RND(0 ~ CFLAG:506-1))
+; 506: 生理周期
+; 507: 生理期間(血液が出る期間)
+;
+; ARG:0 キャラ登録番号
+;
+@MENSTRUATION_CHECK(ARG:0)
+#FUNCTION
+
+VARSET LOCAL, 0
+
+LOCAL = CAN_CHARACTER_MENSTRUATION_CHECK(ARG)
+SIF LOCAL == 0
+	RETURNF 0
+
+LOCAL = CFLAG:ARG:505 % CFLAG:ARG:506
+
+SIF LOCAL < CFLAG:ARG:507
+	RETURNF 1
+	
+LOCAL:1 = CFLAG:ARG:506 * 100 / 2
+LOCAL:2 = LOCAL * 100
+LOCAL:3 = LOCAL:1 + CFLAG:ARG:507 * 100
+
+SIF LOCAL:2 >= LOCAL:1 && LOCAL:2 < LOCAL:3
+	RETURNF -1
+
+RETURNF 0
+
+
+
+; 発情中かどうか(0=平常, 1=発情前期or発情後期, 2=発情中, 3=排卵中)
+;
+; 505: 経過日数
+; 506: 中出し排卵フラグ(1~3=中出しされて排卵中 -> 4=発情後期)
+; 507: 
+;
+; ARG:0 キャラ登録番号
+; ARG:1 ステータス、日数を変化させるかどうか
+;
+;--------------------------------------------------------
+; 発情中チェック
+; 0 平常
+; 1 発情前期 or 発情後期
+; 2 発情中
+; 3 排卵中
+;--------------------------------------------------------
+@RUT_CHECK(ARG:0, ARG:1)
+#FUNCTION
+
+VARSET LOCAL, 0
+
+;発情モードが有効ではない
+SIF RUT_AVAILABLE == 0
+	RETURNF 0
+	
+T:0 = CHARACTER_RUT_TYPE(ARG:0)
+
+;発情する素質がない
+SIF T:0 == 0
+	RETURNF 0
+	
+LOCAL:99 = CALC_CALENDER(CFLAG:(ARG:0):505)
+
+;猫は3月と7月に発情する
+SELECTCASE T:0
+	CASE 1
+		;猫なら3, 7月に発情する
+		SELECTCASE C_MONTH:1
+			CASE 3
+				;3/1
+				LOCAL = RUT_CHECK_INTIME_CAT(ARG, ARG:1, 1)
+				A:99 = LOCAL
+				RETURNF A:99
+			CASE 7
+				;7/12
+				LOCAL = RUT_CHECK_INTIME_CAT(ARG, ARG:1, 12)
+				A:99 = LOCAL
+				RETURNF A:99
+			CASE 12
+				;12/20
+				LOCAL = RUT_CHECK_INTIME_CAT(ARG, ARG:1, 13)
+				A:99 = LOCAL
+				RETURNF A:99
+			CASEELSE
+				;排卵発情を解除
+				SIF ARG:1 && CFLAG:ARG:506
+					CFLAG:ARG:506 = 0
+				RETURNF 0
+		ENDSELECT
+ENDSELECT
+
+;--------------------------------------------------------
+; 猫発情チェック
+;--------------------------------------------------------
+;ARG:2 => offset
+@RUT_CHECK_INTIME_CAT(ARG:0, ARG:1, ARG:2)
+#FUNCTION
+
+ARG:2 = ARG:2 - 1
+
+;中出しされて排卵中
+IF CFLAG:ARG:506
+	;発情後期が終了, 発情休止期
+	IF CFLAG:ARG:506 == 5
+		RETURNF 0
+	;発情後期
+	ELSEIF CFLAG:ARG:506 == 4
+		SIF ARG:1
+			CFLAG:ARG:506 = CFLAG:ARG:506 + 1
+		RETURNF 1
+	ELSE
+		SIF ARG:1
+			CFLAG:ARG:506 = CFLAG:ARG:506 + 1
+		RETURNF 3
+	ENDIF
+;発情継続中もしくは平常
+ELSE
+	SIF C_DAY:0 < (ARG:2 + 3)
+		RETURNF 1
+	;発情期
+	SIF C_DAY:0 < (ARG:2 + 3 + 10)
+		RETURNF 2
+	;排卵しない場合の発情後期
+	SIF C_DAY:0 < (ARG:2 + 3 + 10 + 1)
+		RETURNF 1
+ENDIF
+
+RETURNF 0
+	
+;--------------------------------------------------------
+; 発情素質チェック
+;--------------------------------------------------------
+@CHARACTER_RUT_TYPE(ARG:0)
+#FUNCTION
+
+SIF ARG < 0
+	RETURNF 0
+
+LOCAL = NO:ARG
+
+SELECTCASE LOCAL
+	;シャリス(タイプ:猫)
+	CASE 4
+		RETURNF 1
+ENDSELECT
+
+RETURNF 0

@@ -1,0 +1,36 @@
+;==========================================================================
+;
+; 助手変更時口上(助手)
+;
+;==========================================================================
+@DISPLAY_KOJO_MESSAGE_CHANGEASSI_ASSI
+;助手が居ないなら処理を中断
+SIF ASSI < 0
+	RETURN 0
+
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:ASSI:9 & 1
+	RETURN 0
+	
+;専用口上
+TRYCCALLFORM KOJO_{NO:ASSI}_MESSAGE_PLAYERCHANGE
+CATCH
+ENDCATCH
+;==========================================================================
+;
+; 助手変更時口上(奴隷)
+;
+;==========================================================================
+@DISPLAY_KOJO_MESSAGE_CHANGEASSI_SLAVE
+;助手が居ないなら処理を中断(念のため)
+SIF ASSI < 0
+	RETURN 0
+
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+
+;専用口上
+TRYCCALLFORM KOJO_{NO:TARGET}_MESSAGE_CHANGEASSI
+CATCH
+ENDCATCH

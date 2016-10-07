@@ -1,0 +1,73 @@
+;=============================================================================
+;キャラ変数増加汎用処理
+;=============================================================================
+;-------------------------------------------------
+;セーブする際の不要な変数リセット処理
+;-------------------------------------------------
+@RESET_VAR_SAVE
+;………………………………………………
+;システムで使用する不要変数リセット
+;………………………………………………
+;一文字変数リセット
+VARSET A, 0
+VARSET B, 0
+VARSET C, 0
+VARSET D, 0
+VARSET E, 0
+VARSET F, 0
+VARSET G, 0
+VARSET H, 0
+VARSET I, 0
+VARSET J, 0
+VARSET K, 0
+VARSET L, 0
+VARSET M, 0
+VARSET N, 0
+VARSET O, 0
+VARSET P, 0
+VARSET Q, 0
+VARSET R, 0
+VARSET S, 0
+VARSET T, 0
+VARSET U, 0
+VARSET V, 0
+VARSET W, 0
+VARSET X, 0
+VARSET Y, 0
+VARSET Z, 0
+;ステータス変動数値リセット
+VARSET UP:0, 0
+VARSET DOWN:0, 0
+
+;………………………………………………
+;各キャラの不要変数リセット
+;………………………………………………
+REPEAT CHARANUM
+	;入手する珠の変数をリセット
+	VARSET GOTJUEL:COUNT:0, 0
+	;パラメータをリセット
+	VARSET PALAM:COUNT:0, 0
+	;ステータス変動数値リセット
+	VARSET DOWNBASE:COUNT:0, 0
+	VARSET SOURCE:COUNT:0, 0
+	VARSET TCVAR:COUNT:0, 0, 0, 100
+	;絶頂のリセット
+	VARSET EX:COUNT:0, 0
+	VARSET NOWEX:COUNT:0, 0
+	;一時的装着道具のリセット
+	VARSET TEQUIP:COUNT:0, 0
+	;汚れのリセット
+	RESET_STAIN COUNT
+REND
+
+;=============================================================================
+;キャラ追加時の共通処理
+;=============================================================================
+;ARGに追加したいキャラ番号を入力
+@CHARA_STATE_BASIC, ARG
+
+ADDCHARA ARG
+SIF TARGET < 0
+	TARGET = CHARANUM - 1
+
+;ITEM:(ARG+50) += 1

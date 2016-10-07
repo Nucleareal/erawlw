@@ -1,0 +1,45 @@
+@EVENTTRAIN
+CALL MESSAGE_TRAIN_START_MAIN
+
+;==========================================================================
+;
+; 調教開始時口上
+;
+;==========================================================================
+@MESSAGE_TRAIN_START_MAIN
+CALL MESSAGE_TRAIN_START_ASSI
+CALL MESSAGE_TRAIN_START_SLAVE
+
+;==========================================================================
+;
+; 調教開始時口上(助手)
+;
+;==========================================================================
+@MESSAGE_TRAIN_START_ASSI
+;助手が居ないなら弾く
+SIF ASSI < 0
+	RETURN 0
+	
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:ASSI:9 & 1
+	RETURN 0
+
+;専用口上があるなら呼び出す
+TRYCCALLFORM KOJO_{NO:ASSI}_ASSI_MESSAGE_TRAIN_START
+CATCH
+ENDCATCH
+
+;==========================================================================
+;
+; 調教開始時口上(奴隷)
+;
+;==========================================================================
+@MESSAGE_TRAIN_START_SLAVE
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+	
+;専用口上
+TRYCCALLFORM KOJO_{NO:TARGET}_SLAVE_MESSAGE_TRAIN_START
+CATCH
+ENDCATCH

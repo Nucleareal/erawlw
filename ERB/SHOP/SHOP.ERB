@@ -1,0 +1,297 @@
+;≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+;SHOPメニュー関連
+;≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+;=============================================================================
+;SHOPメニュー本処理
+;=============================================================================
+;複数調教と大人数対応を合成。複数調教用キャラカードチェックを削除
+;コマンドメニュー及び条件を変更
+;｢@SELECT_TARGET｣を削除
+;｢@SHOW_CHARADATA_MENU｣＝ステータス表示
+;｢@CHARA_SALE｣＝キャラ売却
+;｢@SALEITEM_CHECK｣｢@USE_ITEM｣＝アイテムの購入と使用
+;--------------------------------------------------
+;SHOPメニュー冒頭
+;--------------------------------------------------
+@EVENTSHOP
+#ONLY
+;!;[SKIPSTART]
+PRINTW このバリアントはEmuera以外では実行できません
+QUIT
+;!;[SKIPEND]
+
+DRAWLINE
+
+;--------------------------------------------------
+;SHOPメニュー(表示)
+;--------------------------------------------------
+@SHOW_SHOP
+
+CALL INIT_C_DAY
+
+PRINTFORM {DAY+1}日目
+IF TIME == 0
+	PRINTL  午前
+ELSE
+	PRINTL  午後
+ENDIF
+
+IF MASTER >= 0
+	CALL LIFE_BAR(MASTER)
+ENDIF
+IF TARGET >= 0
+	PRINTFORM %CALLNAME%(奴隷)
+	CALL LIFE_BAR(TARGET)
+ENDIF
+IF ASSI >= 0
+	PRINTFORM %CALLNAME:ASSI%(助手)
+	CALL LIFE_BAR, ASSI
+ENDIF
+
+PRINTFORML 所持金:{MONEY}リーフ
+PRINT_ITEM
+
+SIF TARGET > 0
+	PRINTFORMLC [100] - %NAME_SHOPCOMMAND_100()%
+IF CHARANUM > 0 && TARGET > 0
+	PRINTLC [101] - 能力の表示
+	PRINTLC [102] - 休ませる
+ENDIF
+
+SIF CHARANUM > 1
+	PRINTLC [109] - 調教対象変更
+
+IF MONEY > 0
+	PRINTLC [110] - 道具購入
+	PRINTLC [111] - 奴隷購入
+ENDIF
+
+PRINTFORMLC [112] - 奴隷売却
+	
+SIF CHARANUM > 1
+	PRINTLC [113] - 助手変更
+	
+SIF ITEM:42
+	PRINTLC [140] - 主人性別変更
+
+PRINTLC [200] - セーブ
+PRINTLC [300] - ロード
+
+SIF MONEY >= 1000000
+	PRINTLC [543] - 時は満ちた
+
+PRINTLC [777] - コンフィグ
+
+SIF TALENT:MASTER:998 && TARGET > 0
+	PRINTLC [999] - 違法改造
+
+;--------------------------------------------------
+;SHOPメニュー(ユーザーSHOP)
+;--------------------------------------------------
+@USERSHOP
+IF RESULT == 100 && TARGET >= 0
+	BEGIN TRAIN
+	RETURN 1
+ELSEIF RESULT == 101 && CHARANUM > 0
+	CALL SHOW_INFO_WLW
+ELSEIF RESULT == 102
+	PRINTFORML \@(TIME == 0) ? 夜まで休む # 朝まで寝る\@ことにした……
+	;休憩フラグを立てる
+	FLAG:0 = 1
+	BEGIN TURNEND
+	RETURN 1
+ELSEIF RESULT == 109
+	CALL CHANGE_TARGET
+ELSEIF RESULT == 110 && MONEY > 0
+	CALL TOOL_BUY_MAIN
+ELSEIF RESULT == 111 && MONEY > 0
+	CALL CHARA_BUY_MAIN
+ELSEIF RESULT == 112
+	CALL CHARA_SALE
+ELSEIF RESULT == 113
+	CALL CHANGE_ASSI
+ELSEIF RESULT == 140 && ITEM:42
+	CALL CHANGE_SEX, MASTER
+	RETURN 1
+ELSEIF RESULT == 200
+	;セーブする際の不要な変数リセット処理
+	CALL RESET_VAR_SAVE
+	SAVEGAME
+ELSEIF RESULT == 300
+	LOADGAME
+ELSEIF RESULT == 543
+	CALL ENDING_1
+ELSEIF RESULT == 777
+	TFLAG:201 = 0
+	CALL SWEET_POTATO_CONFIGURATION
+ELSEIF RESULT == 999
+	CALL CHEAT_SLAVE_STATUS
+ELSE
+	REUSELASTLINE  
+ENDIF
+RETURN 0
+
+;=============================================================================
+;SHOPより呼び出される基本的な処理
+;=============================================================================
+;-------------------------------------------------
+;調教対象選択
+;-------------------------------------------------
+@CHANGE_TARGET
+$PRINT_LIST
+DRAWLINE
+PRINTFORML 現在\@(TARGET >= 0) ? %CALLNAME:TARGET%を調教中 # 調教中のキャラはいません\@
+PRINTFORML 誰を調教しますか？
+DRAWLINE
+IF TARGET >= 0
+	PRINTL   [ 0]調教しない
+	DRAWLINE
+ENDIF
+
+H:10 = 1
+
+REPEAT CHARANUM
+	SIF COUNT == 0
+		CONTINUE
+		
+	PRINTFORML [{COUNT,2,RIGHT}]%NAME:COUNT%
+REND
+DRAWLINE
+PRINTLC [1000]戻る
+PRINTL 
+
+$INPUT_LOOP
+INPUT
+IF RESULT == 1000
+	RETURN 0
+ELSEIF RESULT == 0
+	RESULT = -1
+ELSEIF RESULT < 0 || RESULT >= CHARANUM
+	GOTO INPUT_LOOP
+ENDIF
+
+SIF RESULT == ASSI
+	ASSI = -1
+TARGET = RESULT
+
+IF TARGET > 0
+	PRINTFORML 調教対象を%CALLNAME:TARGET%にしました
+ELSE
+	PRINTL 調教対象をなくしました
+ENDIF
+
+;-------------------------------------------------
+; 助手選択
+;-------------------------------------------------
+@CHANGE_ASSI
+$PRINT_LIST
+DRAWLINE
+PRINTFORML 現在の助手は\@(ASSI >= 0) ? %CALLNAME:ASSI%です # いません\@
+PRINTFORML 誰を助手にしますか？
+DRAWLINE
+IF TARGET >= 0
+	PRINTL   [ 0]助手を使わない
+	DRAWLINE
+ENDIF
+
+REPEAT CHARANUM
+	SIF COUNT == 0
+		CONTINUE
+	
+	CALL JUDGE_ABLE_ASSI, COUNT
+
+	IF RESULT == 0
+		PRINTFORML [--]%NAME:COUNT% - ×助手化可能な条件を満たしていません
+		CONTINUE
+	ENDIF
+		
+	PRINTFORM [{COUNT,2,RIGHT}]%NAME:COUNT% - ○助手化可能です
+	
+	IF ASSI == COUNT
+		FONTSTYLE 1
+		PRINT (助手)
+		FONTSTYLE 0
+	ELSEIF ISASSI:COUNT
+		PRINT (元助手)
+	ENDIF
+	
+	PRINTL
+REND
+DRAWLINE
+PRINTLC [1000]戻る
+PRINTL 
+
+$INPUT_LOOP
+INPUT
+IF RESULT == 1000
+	RETURN 0
+ELSEIF RESULT == 0
+	RESULT = -1
+ELSEIF RESULT < 0 || RESULT >= CHARANUM || RESULT == ASSI
+	GOTO INPUT_LOOP
+ENDIF
+
+SIF RESULT == TARGET
+	TARGET = -1
+
+ASSI = RESULT
+ISASSI:ASSI |= 1
+
+PRINTFORML 助手を%CALLNAME:ASSI%にしました
+
+;-------------------------------------------------
+; 助手にできるかどうか
+;-------------------------------------------------
+@JUDGE_ABLE_ASSI, ARG
+
+IF (ABL:ARG:0 >= 3 && ABL:ARG:1 >= 3 && ABL:ARG:2 >= 3 && ABL:ARG:3 >= 3 && ABL:ARG:9 >= 3)
+	RETURN 1
+ENDIF
+
+IF (ABL:ARG:0 >= 5 && ABL:ARG:1 >= 4)
+	RETURN 2
+ENDIF
+
+RETURN 0
+
+;--------------------------------------------------
+;[100]調教する関連のコマンド名前選定処理
+;--------------------------------------------------
+@NAME_SHOPCOMMAND_100
+#FUNCTIONS
+
+	;相愛持ち
+IF TALENT:85
+	RETURNF "愛し合う"
+
+;反発刻印3以上で確率
+ELSEIF MARK:3 >= 3 && RAND:3
+	RETURNF "お仕置きをする"
+
+;烙印or反発刻印3以上で確率
+ELSEIF (TALENT:89 || MARK:3 >= 3) && RAND:3
+	RETURNF "躾をする"
+
+;名器持ちで確率
+ELSEIF (TALENT:130 && RAND:3 && CFLAG:500 >= 1) || (TALENT:131 && RAND:3 && CFLAG:504 >= 1)
+	RETURNF "肉欲を満たす"
+
+;その他
+ELSE
+	RETURNF "調教する"
+ENDIF
+RETURNF "調教する"
+
+;=============================================================================
+;特殊汎用処理
+;=============================================================================
+;--------------------------------------------------
+;アイテム補充汎用処理
+;--------------------------------------------------
+;ARG…アイテム番号、ARG:1…補充されるアイテム個数が代入される
+;ただしARG:1の最低値は1とする
+@FILL_PLURAL_ITEM, ARG, ARG:1
+ARG:1 = MAX(ARG:1, 1)
+
+ITEM:ARG += ARG:1
+MONEY:0 -= ITEMPRICE:ARG * ARG:1

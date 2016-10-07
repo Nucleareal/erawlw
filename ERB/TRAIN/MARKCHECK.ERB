@@ -1,0 +1,218 @@
+;-------------------------------------------------
+;ˆóŽæ“¾‚Ìƒ`ƒFƒbƒN
+;-------------------------------------------------
+@MARK_GOT_CHECK
+;-------------------------------------------------
+;”½”­ˆó
+;-------------------------------------------------
+A = UP:11 + UP:12
+
+A:1 = -1
+
+IF A >= 500 && A < 1200 && MARK:3 <= 0
+	MARK:3 = 1
+	
+	A:1 = 1
+	
+	FONTSTYLE 1
+	PRINTFORM %MARKNAME:3%LV1
+	FONTREGULAR
+	PRINTL ‚ðŽæ“¾
+	
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_SLAVE, 3, 1
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_ASSI, 3, 1
+	
+ELSEIF A >= 1200 && A < 3000 && MARK:3 <= 1
+	MARK:3 = 2
+	
+	A:1 = 2
+	
+	FONTSTYLE 1
+	PRINTFORM %MARKNAME:3%LV{MARK:3}
+	FONTREGULAR
+	PRINTL ‚ðŽæ“¾
+	
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_SLAVE, 3, 2
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_ASSI, 3, 2
+	
+	;Š´î–R‚µ‚¢‚Ìê‡‚Í”½”­ˆó‚É‚æ‚é]‡ƒ_ƒEƒ“‚Í‚È‚µ
+	IF ABL:0 == 1 && TALENT:22 == 0
+		PRINTL ‚»‚µ‚Ä]‡‚ªLV0‚É‰º‚ª‚Á‚½
+		ABL:0 = 0
+	ELSEIF ABL:0 == 2 && TALENT:22 == 0
+		PRINTL ‚»‚µ‚Ä]‡‚ªLV1‚É‰º‚ª‚Á‚½
+		ABL:0 = 1
+	ENDIF
+ELSEIF A >= 3000 && MARK:3 <= 2
+	MARK:3 = 3
+	
+	A:1 = 3
+	
+	FONTSTYLE 1
+	PRINTFORM %MARKNAME:3%LV{MARK:3}
+	FONTREGULAR
+	PRINTL ‚ðŽæ“¾
+	
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_SLAVE, 3, 3
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_ASSI, 3, 3
+	
+	;Š´î–R‚µ‚¢‚Ìê‡‚Í”½”­ˆó‚É‚æ‚é]‡ƒ_ƒEƒ“‚Í‚È‚µ
+	IF ABL:0 > 0 && ABL:0 <= 2 && TALENT:22 == 0
+		PRINTL ‚»‚µ‚Ä]‡‚ªLV0‚É‰º‚ª‚Á‚½
+		ABL:0 = 0
+	ELSEIF ABL:0 == 3 && TALENT:22 == 0
+		PRINTL ‚»‚µ‚Ä]‡‚ªLV2‚É‰º‚ª‚Á‚½
+		ABL:0 = 2
+	ENDIF
+ENDIF
+
+IF A:1 > 0
+	IF TALENT:200 && MARK:3 < 3
+		MARK:3 = 3
+		
+		PRINTFORML \\[%TALENTNAME:200%]”­“®\\
+		PRINTFORML %CALLNAME:TARGET%‚Ì%MARKNAME:3%‚ªLv3‚Éã‚ª‚Á‚½
+	ELSE
+		CALL PASSIVE_MARK_3, A:1
+	ENDIF
+ENDIF
+
+;-------------------------------------------------
+;‹ê’Éˆó
+;-------------------------------------------------
+IF UP:9 >= 500 && UP:9 < 1500 && MARK:0 <= 0
+	MARK:0 = 1
+	FONTSTYLE 1
+	PRINTFORM %MARKNAME:0%LV1
+	FONTREGULAR
+	PRINTL ‚ðŽæ“¾
+	
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_SLAVE, 0, 1
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_ASSI, 0, 1
+	
+ELSEIF UP:9 >= 1500 && UP:9 < 3000 && MARK:0 <= 1
+	MARK:0 = 2
+	FONTSTYLE 1
+	PRINTFORM %MARKNAME:0%LV2
+	FONTREGULAR
+	PRINTL ‚ðŽæ“¾
+	
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_SLAVE, 0, 2
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_ASSI, 0, 2
+	
+	;‹CäEŠ´î–R‚µ‚¢‚Ìê‡‚Í‹ê’Éˆó‚É‚æ‚é]‡ƒAƒbƒv‚Í‚È‚µ
+	IF ABL:0 == 0 && TALENT:12 == 0 && TALENT:22 == 0
+		PRINTL ‚»‚µ‚Ä]‡‚ªLV1‚É‚È‚Á‚½
+		ABL:0 = 1
+	ENDIF
+ELSEIF UP:9 >= 3000 && MARK:0 <= 2
+	MARK:0 = 3
+	FONTSTYLE 1
+	PRINTFORM %MARKNAME:0%LV3
+	FONTREGULAR
+	PRINTL ‚ðŽæ“¾
+	
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_SLAVE, 0, 3
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_ASSI, 0, 3
+	
+	;‹CäEŠ´î–R‚µ‚¢‚Ìê‡‚Í‹ê’Éˆó‚É‚æ‚é]‡ƒAƒbƒv‚Í‚È‚µ
+	IF ABL:0 == 0 && TALENT:12 == 0 && TALENT:22 == 0
+		PRINTL ‚»‚µ‚Ä]‡‚ªLV1‚É‚È‚Á‚½
+		ABL:0 = 1
+	ENDIF
+	IF ASSIPLAY
+		IF TALENT:ASSI:83
+			PRINTL iyƒTƒhz‚Ì•Žèj
+			PRINTFORML %EXPNAME:50%{‚P
+			EXP:50 += 1
+		ENDIF
+	ENDIF
+ENDIF
+
+
+;-------------------------------------------------
+;‰õŠyˆó
+;-------------------------------------------------
+A = UP:0 + UP:1 + UP:2
+
+IF A >= 500 && A < 1500 && MARK:1 <= 0
+	MARK:1 = 1
+	FONTSTYLE 1
+	PRINTFORM %MARKNAME:1%LV1
+	FONTREGULAR
+	PRINTL ‚ðŽæ“¾
+	
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_SLAVE, 1, 1
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_ASSI, 1, 1
+	
+ELSEIF A >= 1500 && A < 3000 && MARK:1 <= 1
+	MARK:1 = 2
+	FONTSTYLE 1
+	PRINTFORM %MARKNAME:1%LV2
+	FONTREGULAR
+	PRINTL ‚ðŽæ“¾
+	
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_SLAVE, 1, 2
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_ASSI, 1, 2
+	
+ELSEIF A >= 3000 && MARK:1 <= 2
+	MARK:1 = 3
+	FONTSTYLE 1
+	PRINTFORM %MARKNAME:1%LV3
+	FONTREGULAR
+	PRINTL ‚ðŽæ“¾
+	
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_SLAVE, 1, 3
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_ASSI, 1, 3
+	
+	;Ž©§SEŠ´î–R‚µ‚¢‚Ìê‡‚Í‰õŠyˆó‚É‚æ‚é]‡ƒAƒbƒv‚Í‚È‚µ
+	IF ABL:0 == 0 && TALENT:20 == 0 && TALENT:22 == 0
+		PRINTL ‚»‚µ‚Ä]‡‚ªLV1‚É‚È‚Á‚½
+		ABL:0 = 1
+	ENDIF
+ENDIF
+
+;-------------------------------------------------
+;‹ü•žˆó
+;-------------------------------------------------
+IF TFLAG:200 == 1 && MARK:2 <= 0
+	MARK:2 = 1
+	FONTSTYLE 1
+	PRINTFORM %MARKNAME:2%LV1
+	FONTREGULAR
+	PRINTL ‚ðŽæ“¾
+	
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_SLAVE, 2, 1
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_ASSI, 2, 1
+	
+ELSEIF TFLAG:200 == 2 && MARK:2 <= 1
+	MARK:2 = 2
+	FONTSTYLE 1
+	PRINTFORM %MARKNAME:2%LV2
+	FONTREGULAR
+	PRINTL ‚ðŽæ“¾
+	
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_SLAVE, 2, 2
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_ASSI, 2, 2
+	
+	;Š´î–R‚µ‚¢‚Ìê‡‚Í‹ü•žˆó‚É‚æ‚é]‡ƒAƒbƒv‚Í‚È‚µ
+	IF ABL:0 == 0 && TALENT:22 == 0
+		PRINTL ‚»‚µ‚Ä]‡‚ªLV1‚É‚È‚Á‚½
+		ABL:0 = 1
+	ENDIF
+ELSEIF TFLAG:200 == 3 && MARK:2 <= 2
+	MARK:2 = 3
+	FONTSTYLE 1
+	PRINTFORM %MARKNAME:2%LV3
+	FONTREGULAR
+	PRINTL ‚ðŽæ“¾
+	
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_SLAVE, 2, 3
+	CALL DISPLAY_KOJO_MESSAGE_MARKCNG_ASSI, 2, 3
+	
+	;Š´î–R‚µ‚¢‚Ìê‡‚Í‹ü•žˆó‚É‚æ‚é]‡ƒAƒbƒv‚Í‚È‚µ
+	IF ABL:0 <= 1 && TALENT:22 == 0
+		PRINTL ‚»‚µ‚Ä]‡‚ªLV2‚É‚È‚Á‚½
+		ABL:0 = 2
+	ENDIF
+ENDIF

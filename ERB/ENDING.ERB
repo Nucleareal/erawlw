@@ -1,0 +1,209 @@
+@EVENTTURNEND
+#LATER
+;エンディングチェック
+
+VARSET LOCAL, 0
+
+;キャラ個別エンド
+IF TARGET != -1
+	;名器に溺れる
+	;素質チェック
+	IF TALENT:130 && CFLAG:500 >= 10
+		;能力チェック
+		;従順4以上、欲望5以上、技巧4以上、奉仕精神4以上、精液中毒4以上
+		IF ABL:0 >= 4 && ABL:1 >= 5 && ABL:2 >= 4 && ABL:6 >= 4 && ABL:11 >= 4
+			;刻印チェック
+			SIF MARK:1 >= 3 && MARK:2 >= 3 && MARK:3 <= 1
+				CALL ENDING_MEIKI
+		ENDIF
+	ENDIF
+
+	S = 0
+	; 主人と結婚
+	;能力チェック
+	IF ABL:0 >= 5 && ABL:1 >= 5 && ABL:6 >= 3 && ABL:7 <= 3 && ABL:9 < 3 && ABL:12 < 1
+		IF MARK:0 <= 1 && MARK:3 < 1
+			S = 1
+			;エンゲージリングを持っている
+			IF ITEM:5
+				Z:4 = 0
+				CALL DISPLAY_KOJO_JUDGE_SINGLE_ENDING
+				
+				SIF Z:4 == 0
+					CALL ENDING_MARRY_JUDGE_INPUT
+			ENDIF
+		ENDIF
+	ENDIF
+	IF S
+		ITEMSALES:5 = 1
+	ELSE
+		ITEMSALES:5 = 0
+	ENDIF
+	
+	S = 0
+	; レズ結婚
+	IF ASSI > 0
+		L = NO:ASSI
+		M = NO:TARGET
+		IF RELATION:ASSI:M > 100 && RELATION:TARGET:L > 100
+			;能力を見る
+			IF ABL:0 >= 4 && ABL:ASSI:0 >= 4 && ABL:1 >= 5 && ABL:ASSI:1 >= 5 && ABL:ASSI:2 >= 3
+				IF ABL:7 <= 3 && ABL:ASSI:7 <= 3 && ABL:9 >= 5 && ABL:ASSI:9 >= 5 && ABL:11 < 1 && ABL:ASSI:11 < 1 && ABL:12 >= 3 && ABL:ASSI:12 >= 3
+					IF MARK:0 <= 1 && MARK:3 < 1 && MARK:ASSI:0 <= 1 && MARK:ASSI:3 < 1
+						S = 1
+						IF ITEM:6
+							Z:5 = 0
+							CALL DISPLAY_KOJO_JUDGE_LESBIAN_ENDING
+							
+							SIF Z:5 == 0
+								CALL ENDING_MARRY_LESBIAN_JUDGE_INPUT
+						ENDIF
+					ENDIF
+				ENDIF
+			ENDIF
+		ENDIF
+	ENDIF
+	IF S
+		ITEMSALES:6 = 1
+	ELSE
+		ITEMSALES:6 = 0
+	ENDIF
+	
+	;百合の楽園
+	LOADGLOBAL
+	;変数チェック
+	IF GLOBAL:1 == 63 && NO:TARGET == 7
+		IF ABL:0 >= 4 && ABL:1 >= 5 && ABL:7 <= 3 && ABL:9 >= 5 && ABL:11 < 1 && ABL:12 >= 3
+		CALL ENDING_LESBIAN_LAND
+		ENDIF
+	ENDIF
+ENDIF
+
+;正規エンディング
+IF FLAG:3 < 10
+	SIF MONEY >= FLAG:998
+		CALL ENDING_1
+ENDIF
+
+;全調教完了
+IF FLAG:3 == 10
+
+	LOCAL = 1
+
+	REPEAT 32
+		SIF COUNT == MASTER
+			CONTINUE
+		
+		IF EXISTCSV(COUNT)
+			IF GETCHARA(COUNT) < 0
+				LOCAL = 0
+				BREAK
+			ELSE
+				CONTINUE
+			ENDIF
+		ENDIF
+	REND
+	
+	IF LOCAL
+		CALL ENDING_365
+	ENDIF	
+ENDIF
+
+;日数が過ぎた
+SIF FLAG:4 < 10 && DAY >= FLAG:999
+	CALL ENDING_2
+	
+;結婚するかどうか
+@ENDING_MARRY_JUDGE_INPUT
+PRINTFORML %NAME%と結婚できます。結婚しますか？
+PRINTFORML [0]結婚する
+PRINTFORML [1]結婚しない
+$INPUT_LOOP
+INPUT
+
+SIF RESULT < 0 || RESULT > 1
+	GOTO INPUT_LOOP
+SIF RESULT == 0
+	CALL ENDING_MARRY
+
+;レズ結婚するかどうか
+@ENDING_MARRY_LESBIAN_JUDGE_INPUT
+PRINTFORML %NAME%と%NAME:ASSI%が結婚できます。結婚させますか？
+PRINTFORML [0]結婚させる
+PRINTFORML [1]結婚させない
+$INPUT_LOOP
+INPUT
+
+SIF RESULT < 0 || RESULT > 1
+	GOTO INPUT_LOOP
+SIF RESULT == 0
+	CALL ENDING_MARRY_LESBIAN
+
+;グッドエンド
+@ENDING_1
+
+LOADGLOBAL
+IF GLOBAL:402 & 1
+	PRINTL エンディング確認設定がOFFなのでスキップします
+	DRAWLINE
+	RETURN 0
+ENDIF
+
+PRINTFORML エンディングへ行きますか？
+PRINTFORML [0]行く
+PRINTFORML [1]行かない
+$INPUT_LOOP
+INPUT
+SIF RESULT < 0 || RESULT > 1
+	GOTO INPUT_LOOP
+IF RESULT == 0
+	DRAWLINE
+	
+	CALL ENDING_GOOD_NORMAL
+	
+	QUIT
+ENDIF
+
+;バッドエンド
+@ENDING_2
+
+DRAWLINE
+
+CALL ENDING_BAD_NORMAL
+
+QUIT
+
+@ENDING_365
+
+LOADGLOBAL
+IF GLOBAL:402 & 1
+	PRINTL エンディング確認設定がOFFなのでスキップします
+	DRAWLINE
+	RETURN 0
+ENDIF
+
+PRINTFORML エンディングへ行きますか？
+PRINTFORML [0]行く
+PRINTFORML [1]行かない
+$INPUT_LOOP
+INPUT
+SIF RESULT < 0 || RESULT > 1
+	GOTO INPUT_LOOP
+IF RESULT == 0
+	DRAWLINE
+	
+	CALL ENDING_GOOD_365
+	
+	QUIT
+ENDIF
+
+
+
+@GOOD_CREDIT
+PRINTFORMW %GAMEBASE_TITLE%
+PRINTW Thank you for your playing.
+PRINTW (C)Nucleareal（サークル電磁枷牢) 2016
+
+@BAD_CREDIT
+PRINTFORMW %GAMEBASE_TITLE%
+PRINTW (C)Nucleareal（サークル電磁枷牢) 2016

@@ -1,0 +1,190 @@
+;=====================================================================
+;大人数対応キャラ購入処理 Emuera再構成版
+;=====================================================================
+;関数の説明-----------------------------------------------------------
+;@CHARA_BUY                SHOP.ERBから呼び出される奴隷購入の本処理
+;@CHARA_BUY_AFTER          SHOP.ERBに戻る直前に必ず通る奴隷以外のITEMの再陳列の処理
+;@CHARA_BUY_PRICE          奴隷の値段をITEMPRICEから読み取る処理
+;@CHARA_BUY_RESET          盛大に汚した一文字変数を綺麗(0)に
+
+;ここで使用する変数---------------------------------------------------
+;ITEMSALES:n ＝購入可能かの判定。購入可能な場合、キャラの値段が代入される
+;LOCAL:0 値段表示のために使用
+;LOCAL:1 購入処理のアイテム番号(霊夢なら101)
+;LOCAL:2 購入処理のキャラ番号　(霊夢なら1)
+;LOCAL:3 どこまで陳列したか
+;LOCAL:4 陳列時の改行判定
+;LOCAL:5 大人買いモード判別用　(1:購入後大人買いするかの選択肢が出る)
+@CHARA_BUY_MAIN
+;変数のリセット
+VARSET LOCAL, 0
+
+$CHARA_BUY_PAGE
+;対象の価格・購入可否を調べる。購入可能な場合のみ、ITEMSALES:nに値段を入れて返ってくる
+CALL CHARA_BUY_PRICE
+
+;ページをめくったときなどはここから
+$PRINT_LIST
+;購入メニュー描画処理
+DRAWLINE
+PRINTFORM {DAY+1}日目\@(TIME == 0) ? (昼) # (夜)\@
+SIF TARGET >= 0
+	PRINTFORM  %CALLNAME:TARGET%調教中
+SIF ASSI >= 0
+	PRINTFORM  (助手：%CALLNAME:ASSI%)
+PRINTL 
+
+LOCAL:6 = 32
+
+LOADGLOBAL
+IF GLOBAL:401
+	LOCAL:6 = 64
+ENDIF
+
+;GLOBAL:401 : 女体化モード
+
+LOCAL:10 = 0
+
+REPEAT (LOCAL:6)
+	N = 101+COUNT
+	
+	SIF ITEMSALES:N == 0
+		CONTINUE
+	
+	IF ITEMSALES:N
+		PRINTFORM [{N,3}]%ITEMNAME:N,24,LEFT%({ITEMSALES:N,6,RIGHT}リーフ) 
+		
+		LOCAL:10 += 1
+		IF LOCAL:10 == 2
+			PRINTL
+			LOCAL:10 = 0
+		ENDIF
+	ENDIF
+REND
+SIF LOCAL:10
+	PRINTL
+PRINTFORML 誰を購入しますか？(残り{MONEY}リーフ) 
+
+PRINTLC [1000]戻る
+
+$INPUT_LOOP
+INPUT
+IF RESULT == 1000
+	CALL CHARA_BUY_AFTER
+	RETURN 0
+ELSEIF MONEY <= 0
+	GOTO INPUT_LOOP
+ELSEIF ITEMSALES:RESULT == 0
+	GOTO PRINT_LIST
+ENDIF
+
+;アイテム番号とキャラ番号に選択したキャラを入れる
+LOCAL:1 = RESULT
+LOCAL:2 = LOCAL:1 - 100
+TFLAG:201 = LOCAL:2
+
+CALL CHARA_MANUAL
+
+IF TFLAG:201 == 0
+	DRAWLINE
+	RETURN 0
+ENDIF
+
+;ITEMSALES:n＝値段が所持金より大きい場合再入力
+IF MONEY < ITEMSALES:(LOCAL:1)
+	PRINTL 金額が足りません
+	GOTO PRINT_LIST
+ELSE
+	LOCALS = ＜%CSVNAME(LOCAL:2,0)%を購入しました＞
+	MONEY -= ITEMSALES:(LOCAL:1)
+ENDIF
+
+SIF LOCALS != ""
+	PRINTFORML %LOCALS%
+
+CALL CHARA_INIT, LOCAL:2
+
+DRAWLINE
+
+;-----------------------------------------------
+;キャラ初期化処理
+;-----------------------------------------------
+@CHARA_INIT, ARG
+
+CALL CHARA_STATE_BASIC, ARG
+
+;購入されたキャラの口上での特殊初期設定処理用の命令呼び出し
+
+LOCAL:5 = 0
+LOCAL:6 = 0
+
+CALL CHARA_EXTRA_INITIALIZATION_SLAVE, ARG
+LOCAL:5 = RESULT
+
+IF ASSI > 0
+	CALL CHARA_EXTRA_INITIALIZATION_ASSI, ARG
+	LOCAL:6 = RESULT
+ENDIF
+
+;生理パラメータ設定
+IF CAN_CHARACTER_MENSTRUATION_CHECK(CHARANUM - 1)
+	LOCAL:100 = CHARANUM - 1
+
+	CFLAG:(LOCAL:100):507 = 3 + RAND(5)
+	CFLAG:(LOCAL:100):506 = 28 + RAND(4) - RAND(4)
+	CFLAG:(LOCAL:100):505 = RAND(CFLAG:(LOCAL:100):506)
+	
+	DEBUGPRINTFORML 生理設定完了: (長さ{CFLAG:(LOCAL:100):507} 周期{CFLAG:(LOCAL:100):506} 初期化{CFLAG:(LOCAL:100):505})
+ENDIF
+
+IF CHARACTER_RUT_TYPE(CHARANUM - 1)
+	LOCAL:100 = CHARANUM - 1
+	
+	CFLAG:(LOCAL:100):505 = 0
+	
+	DEBUGPRINTFORML 発情設定完了: (初期化{CFLAG:(LOCAL:100):505})
+ENDIF
+
+IF LOCAL:5 != 1 && LOCAL:6 != 1
+	CALL BOUGHT_CHECK1
+ENDIF
+CALL BOUGHT_CHECK2
+
+;-----------------------------------------------
+;購入後処理
+;-----------------------------------------------
+;奴隷の陳列をすべて消す
+@CHARA_BUY_AFTER
+;アイテム・奴隷陳列フラグの削除
+VARSET ITEMSALES, 0
+
+RETURN 0
+;-----------------------------------------------
+;奴隷の値段の処理
+;-----------------------------------------------
+;ITEMSALES:100～に各奴隷の値段を格納するが、購入不可であるならば0になる
+@CHARA_BUY_PRICE
+;アイテム・奴隷陳列フラグの削除
+
+VARSET ITEMSALES, 0
+;ITEMSALES:n に値段格納
+
+REPEAT 64
+	N = COUNT + 101
+	
+	IF ITEMNAME:N != ""
+		ITEMSALES:N = ITEMPRICE:N
+	ENDIF
+	
+	SIF ITEM:N == 1
+		ITEMSALES:N = 0
+REND
+
+;削除処理
+REPEAT CHARANUM
+	SIF COUNT == 0
+		CONTINUE
+
+	V = NO:COUNT + 100
+	ITEMSALES:V = 0
+REND

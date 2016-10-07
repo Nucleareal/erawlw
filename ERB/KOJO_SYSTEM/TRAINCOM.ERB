@@ -1,0 +1,344 @@
+;==========================================================================
+;
+; 調教コマンド拒否時口上
+;
+;==========================================================================
+@DISPLAY_KOJO_DENIAL_MESSAGE_COM, ARG:0
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+IF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+ENDIF
+
+;専用口上
+TRYCCALLFORM KOJO_{NO:TARGET}_DENIAL_MESSAGE, ARG:0
+CATCH
+ENDCATCH
+;==========================================================================
+;
+; 調教コマンド実行直前時口上
+;
+;==========================================================================
+@DISPLAY_KOJO_TRAIN_MESSAGE_F_COM
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+IF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+ENDIF
+
+;専用口上
+TRYCCALLFORM KOJO_{NO:TARGET}_TRAIN_MESSAGE_F_COM_{SELECTCOM}
+CATCH
+ENDCATCH
+;==========================================================================
+;
+; 調教コマンド実行直後時口上(奴隷)
+;
+;==========================================================================
+@DISPLAY_KOJO_TRAIN_MESSAGE_S_COM
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+IF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+ENDIF
+
+;専用口上
+TRYCCALLFORM KOJO_{NO:TARGET}_TRAIN_MESSAGE_S_COM_{SELECTCOM}
+CATCH
+ENDCATCH
+;==========================================================================
+;
+; 調教コマンド実行直後時口上(助手)
+;
+;==========================================================================
+@DISPLAY_KOJO_TRAIN_MESSAGE_S_COM_ASSI
+;助手がいない
+SIF ASSI < 0
+	RETURN 0
+
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+IF (FLAG:10 & 1) == 0 || (CFLAG:ASSI:9 & 1)
+	RETURN 0
+ENDIF
+
+TRYCCALLFORM KOJO_{NO:TARGET}_TRAIN_MESSAGE_S_COM_{SELECTCOM}_ASSI
+CATCH
+ENDCATCH
+;==========================================================================
+;
+; 器具装着時口上(奴隷)
+;
+;==========================================================================
+;器具装着時に地の文または口上を表示できます。
+;各コマンドの関数内に地の文の関数を呼び出すことで地の文を追加で表示できます。
+;DISPLAY_EQUIP_MESSAGE_COM
+@DISPLAY_EQUIP_MESSAGE_COM_SLAVE, ARG:0
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+
+;専用口上
+TRYCCALLFORM KOJO_{NO:TARGET}_EQUIP_MESSAGE_COM_SLAVE_{ARG:0}
+CATCH
+ENDCATCH
+;==========================================================================
+;
+; 器具装着時口上(助手)
+;
+;==========================================================================
+;器具装着時に地の文または口上を表示できます。
+;各コマンドの関数内に地の文の関数を呼び出すことで地の文を追加で表示できます。
+;DISPLAY_EQUIP_MESSAGE_COM
+@DISPLAY_EQUIP_MESSAGE_COM_ASSI, ARG:0
+;助手がいない
+SIF ASSI < 0
+	RETURN 0
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:ASSI:9 & 1
+	RETURN 0
+
+;専用口上
+TRYCCALLFORM KOJO_{NO:TARGET}_EQUIP_MESSAGE_COM_ASSI_{ARG:0}
+CATCH
+ENDCATCH
+;==========================================================================
+;
+; パラメータ変動時口上(奴隷)
+;
+;==========================================================================
+;パラメータ変動口上 ARG:1:ABLINDEX, ARG:2:ARGLEVEL
+;DISPLAY_KOJO_MESSAGE_PALAMCNG 
+@DISPLAY_KOJO_MESSAGE_PALAMCNG_SLAVE, ARG:0, ARG:1
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+
+TRYCCALLFORM KOJO_{NO:TARGET}_MESSAGE_PALAMCNG_SLAVE, ARG:0, ARG:1
+CATCH
+ENDCATCH
+;==========================================================================
+;
+; パラメータ変動時口上(助手)
+;
+;==========================================================================
+;パラメータ変動をトリガーにした口上
+@DISPLAY_KOJO_MESSAGE_PALAMCNG_ASSI, ARG:0, ARG:1
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+;助手がいない
+SIF ASSI < 0
+	RETURN 0
+
+SIF (FLAG:10 & 1) == 0 || CFLAG:ASSI:9 & 1
+	RETURN 0
+
+TRYCCALLFORM KOJO_{NO:TARGET}_MESSAGE_PALAMCNG_ASSI, ARG:0, ARG:1
+CATCH
+ENDCATCH
+
+;==========================================================================
+;
+; 刻印変動時口上(奴隷)
+;
+;==========================================================================
+;刻印変動口上 ARG:1:MARKINDEX ARG:2:MARKLEVEL
+;DISPLAY_KOJO_MESSAGE_MARKCNG
+@DISPLAY_KOJO_MESSAGE_MARKCNG_SLAVE, ARG:0, ARG:1
+
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+;専用口上
+TRYCCALLFORM KOJO_{NO:TARGET}_MESSAGE_MARKCNG_SLAVE, ARG:0, ARG:1
+CATCH
+ENDCATCH
+
+;==========================================================================
+;
+; 刻印変動時口上(助手)
+;
+;==========================================================================
+;刻印変動後に口上を発動します
+@DISPLAY_KOJO_MESSAGE_MARKCNG_ASSI, ARG:0, ARG:1
+;助手がいない
+SIF ASSI < 0
+	RETURN 0
+
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:ASSI:9 & 1
+	RETURN 0
+;専用口上
+TRYCCALLFORM KOJO_{NO:TARGET}_MESSAGE_MARKCNG_ASSI, ARG:0, ARG:1
+CATCH
+ENDCATCH
+
+;==========================================================================
+;
+; 調教コマンド実行後時口上
+;
+;==========================================================================
+;気絶していない＆設定を地の文にしていない場合、コマンド処理の最後に出力されます
+@DISPLAY_KOJO_MESSAGE_COMEVENT
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+;専用口上
+TRYCCALLFORM KOJO_{NO:TARGET}_MESSAGE_COMEVENT
+CATCH
+ENDCATCH
+
+;==========================================================================
+;
+; 単体エンド時口上
+;
+;==========================================================================
+@DISPLAY_KOJO_JUDGE_SINGLE_ENDING
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+;専用口上
+TRYCCALLFORM KOJO_{NO:TARGET}_JUDGE_SINGLE_ENDING
+	;返却値1なら結婚できない
+	SIF RESULT
+		Z:4 = 1
+CATCH
+ENDCATCH
+
+RETURN 0
+
+;==========================================================================
+;
+; レズエンド時口上(奴隷の方をコール)
+;
+;==========================================================================
+@DISPLAY_KOJO_JUDGE_LESBIAN_ENDING
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+;専用口上
+TRYCCALLFORM KOJO_{NO:TARGET}_JUDGE_LESBIAN_ENDING_{NO:ASSI}, 
+	;返却値1なら結婚できない
+	SIF RESULT
+		Z:5 = 1
+CATCH
+ENDCATCH
+
+RETURN 0
+
+;==========================================================================
+;
+; ステータス閲覧時口上(奴隷)
+;
+;==========================================================================
+;ステータス画面を見る時に出力されます
+;DISPLAY_KOJO_MESSAGE_IMPRESSION_MAIN
+@DISPLAY_KOJO_MESSAGE_IMPRESSION_MAIN_SLAVE
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+
+;専用口上
+TRYCCALLFORM KOJO_{NO:TARGET}_MESSAGE_IMPRESSION_SLAVE
+CATCH
+ENDCATCH
+;==========================================================================
+;
+; ステータス閲覧時口上(助手)
+;
+;==========================================================================
+;ステータス画面を見る時に出力されます
+@DISPLAY_KOJO_MESSAGE_IMPRESSION_MAIN_ASSI
+;助手がいない
+SIF ASSI < 0
+	RETURN 0
+	
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:ASSI:9 & 1
+	RETURN 0
+
+;専用口上
+TRYCCALLFORM KOJO_{NO:TARGET}_MESSAGE_IMPRESSION_ASSI
+CATCH
+ENDCATCH
+;==========================================================================
+;
+; キャラ加入時口上(奴隷)
+;
+;==========================================================================
+;購入された時、連れて来られた時に呼び出される
+;口上で特殊な初期設定を行いたい場合に使用
+;CHARA_EXTRA_INITIALIZATION
+@CHARA_EXTRA_INITIALIZATION_SLAVE, ARG
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+
+;専用口上
+TRYCCALLFORM KOJO_{NO:TARGET}_EXTRA_INITIALIZATION_SLAVE, ARG
+	SIF RESULT
+		Z:6 = 1
+CATCH
+ENDCATCH
+;==========================================================================
+;
+; キャラ加入時口上(助手)
+;
+;==========================================================================
+;購入された時、連れて来られた時に呼び出される
+;口上で特殊な初期設定を行いたい場合に使用
+@CHARA_EXTRA_INITIALIZATION_ASSI, ARG
+;助手がいない
+SIF ASSI < 0
+	RETURN 0
+
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:ASSI:9 & 1
+	RETURN 0
+
+;専用口上
+TRYCCALLFORM KOJO_{NO:TARGET}_EXTRA_INITIALIZATION_ASSI, ARG
+	SIF RESULT
+		Z:7 = 1
+CATCH
+ENDCATCH
+;==========================================================================
+;
+; キャラ売却時口上(奴隷)
+;
+;==========================================================================
+@DISPLAY_KOJO_MESSAGE_SELL_CHARACTER, ARG
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+
+;専用口上
+TRYCCALLFORM KOJO_{NO:ARG}_MESSAGE_SELL_CHARACTER
+CATCH
+ENDCATCH
+;==========================================================================
+;
+; キャラ売却時口上(助手)
+;
+;==========================================================================
+@DISPLAY_KOJO_MESSAGE_SELL_CHARACTER_ASSI, ARG
+;助手がいない
+SIF ASSI < 0
+	RETURN 0
+
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:ASSI:9 & 1
+	RETURN 0
+
+;専用口上
+TRYCCALLFORM KOJO_{NO:TARGET}_MESSAGE_SELL_CHARACTER_{NO:ARG}
+CATCH
+ENDCATCH
+;==========================================================================
+;
+; 烙印を押されたキャラが売却された時の口上
+;
+;==========================================================================
+@DISPLAY_KOJO_MESSAGE_SELL_ADDICTION_CHARACTER, ARG, ARG:1
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+SIF (FLAG:10 & 1) == 0 || CFLAG:(ARG:1):9 & 1
+	RETURN 0
+
+TRYCCALLFORM KOJO_{NO:(ARG:1)}_MESSAGE_SELL_ADDICTION_CHARACTER_{NO:ARG}
+CATCH
+ENDCATCH

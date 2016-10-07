@@ -1,0 +1,486 @@
+@EX_CHECK
+;-------------------------------------------------
+;絶頂処理
+;-------------------------------------------------
+C = 0
+V = 0
+A = 0
+
+;LOCAL:0 EXBORDER
+;LOCAL:1 太字かどうか(1), 色付きかどうか(2)
+;LOCAL:2 異常経験数
+;LOCAL:3 異常経験のフラグID
+
+VARSET LOCAL, 0
+LOCAL:0 = UP:0 + PALAM:0
+EXBORDERC = PALAMLV:4
+
+;[淫核]持ちでC絶頂4回 なら 超越絶頂Ｃに変化
+IF TALENT:135 && LOCAL:0 >= EXBORDERC * 4
+	C = 5
+	DOWN:0 = (EXBORDERC * 4 - 1000)
+	TSTR:500 = 超 越 絶 頂 Ｃ
+	LOCAL:1 = 1
+	LOCAL:2 = 2
+	LOCAL:3 = 1
+ELSEIF LOCAL:0 >= EXBORDERC * 4
+	C = 4
+	DOWN:0 = (EXBORDERC * 4 - 1000)
+	TSTR:500 = 最 強 絶 頂 Ｃ
+	LOCAL:1 = 1
+	LOCAL:2 = 1
+	LOCAL:3 = 2
+ELSEIF LOCAL:0 >= EXBORDERC * 3
+	C = 3
+	DOWN:0 = (EXBORDERC * 3 - 1000)
+	TSTR:500 = 超強絶頂Ｃ
+ELSEIF LOCAL:0 >= EXBORDERC * 2
+	C = 2
+	DOWN:0 = (EXBORDERC * 2 - 1000)
+	TSTR:500 = 強絶頂Ｃ
+ELSEIF LOCAL:0 >= EXBORDERC * 1
+	C = 1
+	DOWN:0 = (EXBORDERC * 1 - 1000)
+	TSTR:500 = 絶頂Ｃ
+ENDIF
+
+SIF LOCAL:1 & 1
+	FONTSTYLE 1
+PRINTFORML %TSTR:500%
+FONTSTYLE 0
+;異常経験チェック
+IF LOCAL:2 && (CFLAG:503 & LOCAL:3) == 0
+	EXP:50 += LOCAL:2
+	PRINTFORML %EXPNAME:50%+{LOCAL:2}
+	CFLAG:503 |= LOCAL:3
+ENDIF
+;調整
+SIF LOCAL:0 - DOWN:0 >= EXBORDERC
+	DOWN:0 = LOCAL:0 - EXBORDERC + 1
+
+
+
+VARSET LOCAL, 0
+LOCAL:0 = UP:1 + PALAM:1
+EXBORDERV = PALAMLV:4
+
+;[発情Lv3]かつ[淫壺]かつ∨絶頂4回分以上 なら 天壊絶頂∨に変化
+IF TALENT:152 && TALENT:130 && LOCAL:0 >= EXBORDERV * 4
+	V = 7
+	DOWN:1 = (EXBORDERV * 4 - 1000)
+	TSTR:500 = 天 壊 絶 頂 ∨
+	LOCAL:1 = 3
+	LOCAL:2 = 3
+	LOCAL:3 = 4
+	
+	;天壊絶頂∨の処理
+	CALL EX_HEAVEN_COLLAPSE_V
+	
+;[淫壺]持ち、もしくは[発情Lv2]以上で∨絶頂4回 なら 超越絶頂∨に変化
+ELSEIF (TALENT:130 || TALENT:151 || TALENT:152) && LOCAL:0 >= EXBORDERV * 4
+	V = 5
+	DOWN:1 = (EXBORDERV * 4 - 1000)
+	TSTR:500 = 超 越 絶 頂 ∨
+	LOCAL:1 = 1
+	LOCAL:2 = 2
+	LOCAL:3 = 8
+ELSEIF LOCAL:0 >= EXBORDERV * 4
+	V = 4
+	DOWN:1 = (EXBORDERV * 4 - 1000)
+	TSTR:500 = 最 強 絶 頂 ∨
+	LOCAL:1 = 1
+	LOCAL:2 = 1
+	LOCAL:3 = 16
+ELSEIF LOCAL:0 >= EXBORDERV * 3
+	V = 3
+	DOWN:1 = (EXBORDERV * 3 - 1000)
+	TSTR:500 = 超強絶頂∨
+ELSEIF LOCAL:0 >= EXBORDERV * 2
+	V = 2
+	DOWN:1 = (EXBORDERV * 2 - 1000)
+	TSTR:500 = 強絶頂∨
+ELSEIF LOCAL:0 >= EXBORDERV * 1
+	V = 1
+	DOWN:1 = (EXBORDERV * 1 - 1000)
+	TSTR:500 = 絶頂∨
+ENDIF
+
+SIF LOCAL:1 & 1
+	FONTSTYLE 1
+SIF LOCAL:1 & 2
+	SETCOLOR 255, 0, 0
+	
+PRINTFORML %TSTR:500%
+
+FONTSTYLE 0
+RESETCOLOR
+
+;異常経験チェック
+IF LOCAL:2 && (CFLAG:503 & LOCAL:3) == 0
+	EXP:50 += LOCAL:2
+	PRINTFORML %EXPNAME:50%+{LOCAL:2}
+	CFLAG:503 |= LOCAL:3
+ENDIF
+;調整
+SIF LOCAL:0 - DOWN:1 >= EXBORDERV
+	DOWN:1 = LOCAL:0 - EXBORDERV + 1
+
+
+
+VARSET LOCAL, 0
+LOCAL:0 = UP:2 + PALAM:2
+EXBORDERA = PALAMLV:4
+
+;[発情Lv3]かつ[淫菊]かつＡ絶頂4回分以上 なら 天壊絶頂Ａに変化
+IF TALENT:152 && TALENT:131 && LOCAL:0 >= EXBORDERA * 4
+	A = 7
+	DOWN:2 = (EXBORDERA * 4 - 1000)
+	TSTR:500 = 天 壊 絶 頂 Ａ
+	LOCAL:1 = 3
+	LOCAL:2 = 3
+	LOCAL:3 = 32
+	
+	;天壊絶頂Ａの処理
+	CALL EX_HEAVEN_COLLAPSE_A
+	
+;[淫菊]持ち、もしくは[発情Lv2]以上でＡ絶頂4回 なら 超越絶頂Ａに変化
+ELSEIF (TALENT:131 || TALENT:151 || TALENT:152) && LOCAL:0 >= EXBORDERA * 4
+	A = 5
+	DOWN:2 = (EXBORDERA * 4 - 1000)
+	TSTR:500 = 超 越 絶 頂 Ａ
+	LOCAL:1 = 1
+	LOCAL:2 = 2
+	LOCAL:3 = 64
+ELSEIF LOCAL:0 >= EXBORDERA * 4
+	A = 4
+	DOWN:2 = (EXBORDERA * 4 - 1000)
+	TSTR:500 = 最 強 絶 頂 Ａ
+	LOCAL:1 = 1
+	LOCAL:2 = 1
+	LOCAL:3 = 128
+ELSEIF LOCAL:0 >= EXBORDERA * 3
+	A = 3
+	DOWN:2 = (EXBORDERA * 3 - 1000)
+	TSTR:500 = 超強絶頂Ａ
+ELSEIF LOCAL:0 >= EXBORDERA * 2
+	A = 2
+	DOWN:2 = (EXBORDERA * 2 - 1000)
+	TSTR:500 = 強絶頂Ａ
+ELSEIF LOCAL:0 >= EXBORDERA * 1
+	A = 1
+	DOWN:2 = (EXBORDERA * 1 - 1000)
+	TSTR:500 = 絶頂Ａ
+ENDIF
+
+SIF LOCAL:1 & 1
+	FONTSTYLE 1
+SIF LOCAL:1 & 2
+	SETCOLOR 255, 0, 0
+	
+PRINTFORML %TSTR:500%
+
+FONTSTYLE 0
+RESETCOLOR
+
+;異常経験チェック
+IF LOCAL:2 && (CFLAG:503 & LOCAL:3) == 0
+	EXP:50 += LOCAL:2
+	PRINTFORML %EXPNAME:50%+{LOCAL:2}
+	CFLAG:503 |= LOCAL:3
+ENDIF
+;調整
+SIF LOCAL:0 - DOWN:2 >= EXBORDERA
+	DOWN:2 = LOCAL:0 - EXBORDERA + 1
+
+
+
+;口上呼び出し
+IF C && V && A
+	CALL DISPLAY_MESSAGE_ORGASM_ALL, C, V, A
+ELSEIF C && V
+	CALL DISPLAY_MESSAGE_ORGASM_CV, C, V, A
+ELSEIF C && A
+	CALL DISPLAY_MESSAGE_ORGASM_CA, C, V, A
+ELSEIF V && A
+	CALL DISPLAY_MESSAGE_ORGASM_VA, C, V, A
+ELSEIF C
+	CALL DISPLAY_MESSAGE_ORGASM_C, C, V, A
+ELSEIF V
+	CALL DISPLAY_MESSAGE_ORGASM_V, C, V, A
+ELSEIF A
+	CALL DISPLAY_MESSAGE_ORGASM_A, C, V, A
+ENDIF
+
+IF C && V && A
+	FONTSTYLE 1
+	PRINTL 三 重 絶 頂
+	FONTSTYLE 0
+	PRINTL (それぞれ4倍の珠が得られます)
+	C *= 4
+	V *= 4
+	A *= 4
+ELSEIF C && V
+	PRINTL Ｃ＆Ｖ絶頂
+	PRINTL (それぞれ2倍の珠が得られます)
+	C *= 2
+	V *= 2
+ELSEIF C && A
+	PRINTL Ｃ＆Ａ絶頂
+	PRINTL (それぞれ2倍の珠が得られます)
+	C *= 2
+	A *= 2
+ELSEIF V && A
+	PRINTL Ｖ＆Ａ絶頂
+	PRINTL (それぞれ2倍の珠が得られます)
+	V *= 2
+	A *= 2
+ENDIF
+
+;Ｃ絶頂時、ソースと屈服刻印の取得
+IF C
+	SOURCE:12 += 500 * C
+	SOURCE:13 += 200 * C
+	LOSEBASE:0 += 20
+	LOSEBASE:1 += 10
+	
+	IF C >= 5
+		;屈服刻印２に相当
+		SIF TFLAG:200 < 2
+			TFLAG:200 = 2
+	ELSEIF C >= 2
+		;屈服刻印１に相当
+		SIF TFLAG:200 < 1
+			TFLAG:200 = 1
+	ENDIF
+ENDIF
+;∨絶頂時、ソースと屈服刻印の取得
+IF V
+	SOURCE:12 += 700 * V
+	SOURCE:13 += 400 * V
+	SOURCE:11 += 800 * V
+	SOURCE:16 += 500 * V
+	LOSEBASE:0 += 40
+	LOSEBASE:1 += 20
+
+	IF V >= 5
+		;屈服刻印３に相当
+		SIF TFLAG:200 < 3
+			TFLAG:200 = 3
+	ELSEIF V >= 3
+		;屈服刻印２に相当
+		SIF TFLAG:200 < 2
+			TFLAG:200 = 2
+	ELSEIF V >= 1
+		;屈服刻印１に相当
+		SIF TFLAG:200 < 1
+			TFLAG:200 = 1
+	ENDIF
+ENDIF
+;Ａ絶頂時、ソースと屈服刻印の取得
+IF A
+	SOURCE:12 += 1200 * A
+	SOURCE:13 += 4500 * A
+	SOURCE:11 += 3500 * A
+	SOURCE:16 += 1500 * A
+	LOSEBASE:0 += 60
+	LOSEBASE:1 += 30
+
+	IF A >= 2
+		;屈服刻印３に相当
+		SIF TFLAG:200 < 3
+			TFLAG:200 = 3
+	ELSEIF A >= 1
+		;屈服刻印２に相当
+		SIF TFLAG:200 < 2
+			TFLAG:200 = 2
+	ENDIF
+ENDIF
+
+;絶頂による欲望ＬＶアップ
+L = 0
+
+;単独絶頂
+SIF C
+	L = 1
+SIF V
+	L = 1
+SIF A
+	L = 2
+
+;C4A2かV4A2
+SIF (C >= 4 || V >= 4) && A >= 2
+	L = 3
+;C6V6
+SIF C >= 6 && V >= 6
+	L = 3
+;V12かA12
+SIF V >= 12 || A >= 12
+	L = 3
+
+;V12A12
+SIF V >= 12 && A >= 12
+	L = 4
+;CVAで36以上
+SIF C + V + A >= 36
+	L = 4
+;V天壊3重 + CAで8
+SIF V >= 28 && C + A >= 8
+	L = 4
+;A天壊3重 + VAで8
+SIF A >= 28 && V + A >= 8
+	L = 4
+
+;全て最強絶頂以上
+SIF C >= 16 && V >= 16 && A >= 16
+	L = 5
+
+;自制心があると１下がる
+SIF TALENT:20
+	L = L-1
+
+IF ABL:1 < L
+	ABL:1 = L
+	PRINTFORML そして%ABLNAME:1%が{L}になった
+
+	;欲望の上昇による[抑圧][抵抗]の消滅をチェック
+	CALL YOKUBO_UP_CHECK
+ENDIF
+
+;NOWEXにデータを入れる（絶頂時口上に使うかどうかは怪しい）
+NOWEX:0 = C
+NOWEX:1 = V
+NOWEX:2 = A
+
+;絶頂回数を増やす
+EX:0 += C
+EX:1 += V
+EX:2 += A
+
+;絶頂経験を増やす
+EXP:2 += C+V+A
+
+;----------------------------------------------------
+; 天壊絶頂∨のそり、そりすぎて処理になった
+;----------------------------------------------------
+@EX_HEAVEN_COLLAPSE_V
+
+;天壊絶頂フラグ
+TFLAG:501 = 1
+
+;苦痛刻印2
+IF MARK:0 < 2
+	MARK:0 = 2
+	
+	FONTSTYLE 1
+	PRINTFORM 苦痛刻印Lv2
+	FONTSTYLE 0
+	PRINTL を取得
+ENDIF
+
+;快楽刻印3
+IF MARK:1 < 3
+	MARK:1 = 3
+	
+	FONTSTYLE 1
+	PRINTFORM 快楽刻印Lv3
+	FONTSTYLE 0
+	PRINTL を取得
+ENDIF
+
+IF ABL:1 < 3
+	ABL:1 = 3
+	PRINTFORML %ABLNAME:1%がLv3になった
+ENDIF
+
+IF ABL:6 < 3
+	ABL:6 = 3
+	PRINTFORML %ABLNAME:6%がLv3になった
+ENDIF
+
+IF ABL:7 < 3
+	ABL:7 = 3
+	PRINTFORML %ABLNAME:7%がLv3になった
+ENDIF
+
+IF ABL:8 < 2
+	ABL:8 = 2
+	PRINTFORML %ABLNAME:8%がLv2になった
+ENDIF
+
+IF ASSIPLAY && ABL:9 < 5
+	ABL:9 = 5
+	PRINTFORML %ABLNAME:9%がLv5になった
+ENDIF
+
+IF ABL:10 < 2
+	ABL:10 = 2
+	PRINTFORML %ABLNAME:10%がLv2になった
+ENDIF
+
+IF ASSIPLAY && ABL:12 < 3
+	ABL:12 = 3
+	PRINTFORML %ABLNAME:12%がLv3になった
+ENDIF
+
+;=========================================================
+; 天壊絶頂Ａの処理
+;=========================================================
+@EX_HEAVEN_COLLAPSE_A
+
+;天壊絶頂フラグ
+TFLAG:501 = 1
+
+;苦痛刻印3
+IF MARK:0 < 3
+	MARK:0 = 3
+	
+	FONTSTYLE 1
+	PRINTFORM 苦痛刻印Lv3
+	FONTSTYLE 0
+	PRINTL を取得
+ENDIF
+
+;快楽刻印2
+IF MARK:1 < 2
+	MARK:1 = 2
+	
+	FONTSTYLE 1
+	PRINTFORM 快楽刻印Lv2
+	FONTSTYLE 0
+	PRINTL を取得
+ENDIF
+
+IF ABL:1 < 3
+	ABL:1 = 3
+	PRINTFORML %ABLNAME:1%がLv3になった
+ENDIF
+
+IF ABL:6 < 3
+	ABL:6 = 3
+	PRINTFORML %ABLNAME:6%がLv3になった
+ENDIF
+
+IF ABL:7 < 2
+	ABL:7 = 2
+	PRINTFORML %ABLNAME:7%がLv2になった
+ENDIF
+
+IF ABL:8 < 3
+	ABL:8 = 3
+	PRINTFORML %ABLNAME:8%がLv3になった
+ENDIF
+
+IF ASSIPLAY && ABL:9 < 4
+	ABL:9 = 4
+	PRINTFORML %ABLNAME:9%がLv4になった
+ENDIF
+
+IF ABL:10 < 2
+	ABL:10 = 2
+	PRINTFORML %ABLNAME:10%がLv2になった
+ENDIF
+
+IF ASSIPLAY && ABL:12 < 2
+	ABL:12 = 2
+	PRINTFORML %ABLNAME:12%がLv2になった
+ENDIF

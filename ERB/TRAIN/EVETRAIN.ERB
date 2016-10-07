@@ -1,0 +1,43 @@
+@EVENTTRAIN
+;主人公の射精を0に
+BASE:MASTER:2 = 0
+;いちおう調教対象と助手も
+BASE:TARGET:2 = 0
+SIF ASSI >= 0
+	BASE:ASSI:2 = 0
+
+;射精フラグ、処女喪失フラグなどをリセット
+VARSET TFLAG, 0
+
+;射精回数: TFLAG:500
+
+LOADGLOBAL
+SIF GLOBAL:403 && ASSI > 0 && LASTASSI == ASSI
+	ASSIPLAY = ASSI
+
+;調教者は誰か
+IF ASSIPLAY == 0
+	PLAYER = MASTER
+ELSE
+	PLAYER = ASSI
+ENDIF
+
+;ここに生理や発情の処理を入れる
+
+;------------------------------------------------------
+; 生理処理
+;------------------------------------------------------
+
+IF MENSTRUATION_AVAILABLE
+	SIF MENSTRUATION_CHECK(MASTER) > 0
+		STAIN:MASTER:3 |= 16
+
+	SIF MENSTRUATION_CHECK(TARGET) > 0
+		STAIN:TARGET:3 |= 16
+	
+	SIF ASSI > 0 && MENSTRUATION_CHECK(ASSI) > 0
+		STAIN:ASSI:3 |= 16
+ENDIF
+
+IF RUT_AVAILABLE
+ENDIF

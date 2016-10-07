@@ -1,0 +1,36 @@
+;購入時チェック2
+@BOUGHT_CHECK2
+
+;一時退避
+V:8 = TARGET
+TARGET = CHARANUM - 1
+
+;PRINTFORML BOUGHT_CHECK:\@TALENT:MASTER:998 ? DEBUG # NORMAL\@
+
+DEBUGPRINTL * シャドウ・アリス購入チェック *
+
+IF NO:TARGET == 4
+	IF ASSI <= 0 || NO:ASSI != 3
+		;[自制心][悲観的]付与
+		TALENT:20 = 1
+		TALENT:26 = 1
+		
+		;[うそなき！]削除
+		TALENT:204 = 0
+	ELSE
+	
+		TALENT:11 = 0
+		TALENT:34 = 0
+	
+		;リトル・アリスの欲望が5以上かつ奉仕精神が4以上の場合
+		IF ABL:ASSI:1 >= 5 && ABL:ASSI:6 >= 4
+			;主人との関係を改善する
+			DEBUGPRINTL 関係改善
+			RELATION:TARGET:0 = 100
+		ENDIF
+	ENDIF
+ENDIF
+
+DEBUGPRINTL * シャドウ・アリス購入チェックここまで *
+
+TARGET = V:8

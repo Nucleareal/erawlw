@@ -1,0 +1,126 @@
+;==========================================================================
+;
+; Ｃ∨Ａ絶頂時口上
+;
+;==========================================================================
+@DISPLAY_MESSAGE_ORGASM_ALL, ARG:0, ARG:1, ARG:2
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+IF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+ENDIF
+
+;専用口上
+TRYCCALLFORM DISPLAY_{NO:TARGET}_MESSAGE_ORGASM_ALL, ARG:0, ARG:1, ARG:2
+CATCH
+	TRYCCALLFORM DISPLAY_{NO:TARGET}_MESSAGE_ORGASM_GENERAL, ARG:0, ARG:1, ARG:2
+	CATCH
+	ENDCATCH
+ENDCATCH
+;==========================================================================
+;
+; Ｃ∨絶頂時口上
+;
+;==========================================================================
+@DISPLAY_MESSAGE_ORGASM_CV, ARG:0, ARG:1, ARG:2
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+IF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+ENDIF
+
+;専用口上
+TRYCCALLFORM DISPLAY_{NO:TARGET}_MESSAGE_ORGASM_CV, ARG:0, ARG:1, ARG:2
+CATCH
+	TRYCCALLFORM DISPLAY_{NO:TARGET}_MESSAGE_ORGASM_GENERAL, ARG:0, ARG:1, ARG:2
+	CATCH
+	ENDCATCH
+ENDCATCH
+;==========================================================================
+;
+; ＣＡ絶頂時口上
+;
+;==========================================================================
+@DISPLAY_MESSAGE_ORGASM_CA, ARG:0, ARG:1, ARG:2
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+IF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+ENDIF
+
+;専用口上
+TRYCCALLFORM DISPLAY_{NO:TARGET}_MESSAGE_ORGASM_CA, ARG:0, ARG:1, ARG:2
+CATCH
+	TRYCCALLFORM DISPLAY_{NO:TARGET}_MESSAGE_ORGASM_GENERAL, ARG:0, ARG:1, ARG:2
+	CATCH
+	ENDCATCH
+ENDCATCH
+;==========================================================================
+;
+; ∨Ａ絶頂時口上
+;
+;==========================================================================
+@DISPLAY_MESSAGE_ORGASM_VA, ARG:0, ARG:1, ARG:2
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+IF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+ENDIF
+
+;専用口上
+TRYCCALLFORM DISPLAY_{NO:TARGET}_MESSAGE_ORGASM_VA, ARG:0, ARG:1, ARG:2
+CATCH
+	TRYCCALLFORM DISPLAY_{NO:TARGET}_MESSAGE_ORGASM_GENERAL, ARG:0, ARG:1, ARG:2
+	CATCH
+	ENDCATCH
+ENDCATCH
+;==========================================================================
+;
+; Ｃ絶頂時口上
+;
+;==========================================================================
+@DISPLAY_MESSAGE_ORGASM_C, ARG:0, ARG:1, ARG:2
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+IF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+ENDIF
+
+;専用口上
+TRYCCALLFORM DISPLAY_{NO:TARGET}_MESSAGE_ORGASM_C, ARG:0, ARG:1, ARG:2
+CATCH
+	TRYCCALLFORM DISPLAY_{NO:TARGET}_MESSAGE_ORGASM_GENERAL, ARG:0, ARG:1, ARG:2
+	CATCH
+	ENDCATCH
+ENDCATCH
+;==========================================================================
+;
+; ∨絶頂時口上
+;
+;==========================================================================
+@DISPLAY_MESSAGE_ORGASM_V, ARG:0, ARG:1, ARG:2
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+IF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+ENDIF
+
+;専用口上
+TRYCCALLFORM DISPLAY_{NO:TARGET}_MESSAGE_ORGASM_V, ARG:0, ARG:1, ARG:2
+CATCH
+	TRYCCALLFORM DISPLAY_{NO:TARGET}_MESSAGE_ORGASM_GENERAL, ARG:0, ARG:1, ARG:2
+	CATCH
+	ENDCATCH
+ENDCATCH
+;==========================================================================
+;
+; Ａ絶頂時口上
+;
+;==========================================================================
+@DISPLAY_MESSAGE_ORGASM_A, ARG:0, ARG:1, ARG:2
+;口上を表示しない(キャラ個別・コンフィグ設定問わず優先される)
+IF (FLAG:10 & 1) == 0 || CFLAG:9 & 1
+	RETURN 0
+ENDIF
+
+;専用口上
+TRYCCALLFORM DISPLAY_{NO:TARGET}_MESSAGE_ORGASM_A, ARG:0, ARG:1, ARG:2
+CATCH
+	TRYCCALLFORM DISPLAY_{NO:TARGET}_MESSAGE_ORGASM_GENERAL, ARG:0, ARG:1, ARG:2
+	CATCH
+	ENDCATCH
+ENDCATCH

@@ -1,0 +1,152 @@
+;名器の虜
+@ENDING_MEIKI
+DRAWLINE
+PRINTW ・・・・・・・・・
+PRINTW ・・・・・・
+PRINTW ・・・
+PRINTW ―――名器の虜エンディング条件達成―――
+PRINTW ・・・・・・・・・
+PRINTW ・・・・・・
+PRINTW ・・・
+PRINTFORMW 気づくと、%NAME:MASTER%は自らのペニスを%NAME:TARGET%の膣に打ち付けていた。
+PRINTW 彼女のそれはとても心地よく、調教という行為を霞ませるものだった。
+PRINTW ・・・・・・
+PRINTW 原因は彼女のそれにあることは分かっていたが、抗うことはできなかった。
+PRINTW 彼女の方もまんざらではないようで、主人が望むのなら、そのまま続けていても良い様であった。
+PRINTW ・・・・・・
+PRINTW そして二人はそのまま、お互いの性器を混じり合わせ続け、快楽を貪り続けた。
+PRINTW ・・・・・・
+PRINTW ・・・
+PRINTFORMW %NAME:MASTER%はもう何度目か覚えていない射精で、気が遠くなる経験をした。
+PRINTW そのまま、あなたが目を覚ますことは二度となかった。
+PRINTW ・・・・・・・・・
+PRINTW ・・・・・・
+PRINTW ・・・
+PRINTW -Game Over-
+CALL BAD_CREDIT
+QUIT
+
+;主人と結婚
+@ENDING_MARRY
+PRINTW ・・・・・・・・・
+PRINTW ・・・・・・
+PRINTW ・・・
+PRINTW ―――結婚エンディング条件達成―――
+
+LOADGLOBAL
+;百合打ち消し
+L = NO:TARGET
+Q = 0
+SIF (NO:TARGET == 1 || NO:TARGET == 2)
+	Q = 1
+SIF (NO:TARGET == 3 || NO:TARGET == 4)
+	Q = 2
+SIF (NO:TARGET == 5 || NO:TARGET == 6)
+	Q = 4
+SIF (NO:TARGET == 8 || NO:TARGET == 9)
+	Q = 8
+SIF (NO:TARGET == 10 || NO:TARGET == 11)
+	Q = 16
+SIF (NO:TARGET == 12 || NO:TARGET == 13)
+	Q = 32
+GLOBAL:1 &= (63 - Q)
+SAVEGLOBAL
+
+PRINTW ・・・・・・・・・
+PRINTW ・・・・・・
+PRINTW ・・・
+PRINTFORMW いつもの様に%NAME:MASTER%の調教を待ち侘びる%NAME%の元へ、結婚指輪を持ち向かった。
+PRINTFORMW %NAME:MASTER%は、調教という無礼な今までの行為を詫びると共に、それを差し出した。
+PRINTW ・・・・・・
+PRINTFORMW %NAME%は一瞬戸惑った様子であったが、一呼吸置いて、はい、と答えた。
+PRINTW 二人は心からのキスを交わし、口同士には糸を引いた。
+PRINTW ・・・・・・
+PRINTW それから抱きしめ合い、永遠を誓いあった。
+PRINTW ・・・・・・
+PRINTW ・・・
+PRINTW 数日後、二人は結婚式を挙げた。
+PRINTFORMW 純白のドレスを着た%NAME%は、比較対象のないほど綺麗だった。
+PRINTW ・・・・・・・・・
+PRINTW ・・・・・・
+PRINTW ・・・
+PRINTW -結婚END-
+CALL GOOD_CREDIT
+QUIT
+
+;レズ結婚
+@ENDING_MARRY_LESBIAN
+PRINTW ・・・・・・・・・
+PRINTW ・・・・・・
+PRINTW ・・・
+PRINTW ―――百合結婚エンディング条件達成―――
+
+LOADGLOBAL
+
+L = NO:TARGET
+M = NO:ASSI
+
+Q = 0
+SIF (L == 1 && M == 2) || (L == 2 && M == 1)
+	Q = 1
+SIF (L == 3 && M == 4) || (L == 4 && M == 3)
+	Q = 2
+SIF (L == 5 && M == 6) || (L == 6 && M == 5)
+	Q = 4
+SIF (L == 8 && M == 9) || (L == 9 && M == 8)
+	Q = 8
+SIF (L == 10 && M == 11) || (L == 11 && M == 10)
+	Q = 16
+SIF (L == 12 && M == 13) || (L == 13 && M == 12)
+	Q = 32
+IF Q
+	GLOBAL:1 |= Q
+	SAVEGLOBAL
+ENDIF
+
+PRINTW ・・・・・・・・・
+PRINTW ・・・・・・
+PRINTW ・・・
+PRINTFORMW いつもの様に%NAME:ASSI%の調教を待ち侘びる%NAME%の元へ、
+PRINTFORMW ペアリングを持った%NAME:ASSI%が向かった。
+PRINTFORMW %NAME:ASSI%は、少し貯めを置いてからそれを差し出した。
+PRINTW ・・・・・・
+PRINTFORM %NAME%は突然の事に
+IF Q
+	PRINTW 嬉し泣きで出てきた涙を拭い、
+	PRINT 涙声で直ちに
+ELSE
+	PRINTW 一瞬戸惑った様子であったが、
+	PRINT 一呼吸置いて、
+ENDIF
+PRINTW はい、と答えた。
+PRINT 二人は心からのキスを交わし、口同士には
+IF Q
+	PRINT 多量の
+ENDIF
+PRINTW 糸を引いた。
+
+IF Q
+	PRINTW 彼女たちの目には、もはやお互いの存在以外映らないようであった。
+ENDIF
+
+PRINTW ・・・・・・
+
+PRINTFORM %NAME%と%NAME:ASSI%は
+IF Q
+	PRINTL 元々一つの存在であったかのように
+	PRINT 身体を寄せ合い、深く
+ELSE
+	PRINT 身体を寄せ合い、
+ENDIF
+PRINTW 抱きしめあった。
+
+PRINTW ・・・・・・
+PRINTW ・・・
+PRINTFORMW 数日後、%NAME%と%NAME:ASSI%は結婚式を挙げた。
+PRINTW 2枚の純白のドレスが、日に輝いていた。
+PRINTW ・・・・・・・・・
+PRINTW ・・・・・・
+PRINTW ・・・
+PRINTW -百合結婚END-
+CALL GOOD_CREDIT
+QUIT

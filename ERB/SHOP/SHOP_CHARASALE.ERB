@@ -1,0 +1,865 @@
+;=============================================================================
+;ìzóÍîÑãpÅEâï˙ÇÃèàóù
+;=============================================================================
+;-------------------------------------------------
+;îÑãpÅEâï˙ÉLÉÉÉâÇÃëIë
+;-------------------------------------------------
+@CHARA_SALE
+
+VARSET LOCAL, 0
+
+$PRINT_LIST
+DRAWLINE
+PRINTFORML íNÇîÑãpÇµÇ‹Ç∑Ç©ÅH
+DRAWLINE
+REPEAT CHARANUM
+	;éÂêlÇÕîÑÇÍÇ»Ç¢(2èdÇÃà”ñ°Ç≈)
+	SIF COUNT == MASTER
+		CONTINUE
+	
+	CALL CHARA_SALE_CHECK, COUNT
+	IF RESULT == 0
+		PRINTFORML [-] - %NAME:COUNT% Å~îÑãpâ¬î\Ç»èåèÇñûÇΩÇµÇƒÇ¢Ç‹ÇπÇÒ
+		CONTINUE
+	ENDIF
+	
+	IF TALENT:COUNT:89
+		PRINTFORML [-] - %NAME:COUNT% Å~‡ÄàÛÇ™âüÇ≥ÇÍÇƒÇ¢Ç‹Ç∑
+		CONTINUE
+	ENDIF
+		
+	PRINTFORM [{COUNT}] - %NAME:COUNT% ÅõîÑãpâ¬î\Ç≈Ç∑
+	
+	IF ASSI == COUNT
+		FONTSTYLE 1
+		PRINT  (èïéË)
+		FONTSTYLE 0
+	ELSEIF ISASSI:COUNT == 1
+		PRINT (å≥èïéË)
+	ENDIF
+	
+	PRINTL
+REND
+
+DRAWLINE
+
+PRINTLC [1000]ñﬂÇÈ
+PRINTL 
+
+$INPUT_LOOP
+INPUT
+
+LOCAL:11 = RESULT
+
+IF RESULT == 1000
+	RETURN 0
+ELSEIF RESULT <= 0 || RESULT >= CHARANUM
+	GOTO INPUT_LOOP
+ELSEIF TALENT:(LOCAL:11):89
+	GOTO INPUT_LOOP
+ELSE
+	CALL CHARA_SALE_CHECK, LOCAL:11
+	SIF RESULT == 0
+		GOTO INPUT_LOOP
+ENDIF
+
+LOCAL = RESULT
+CALL SALE_CONFIRM, LOCAL:11
+
+RESTART
+
+;-------------------------------------------------
+;îÑãpèàóù
+;-------------------------------------------------
+@SALE_CONFIRM, ARG
+LOCAL = 0
+LOCAL:1 = TARGET
+LOCAL:2 = ASSI
+LOCAL:3 = 0
+;îÑílÇÃåvéZ
+CALL SALE_CHARA(ARG)
+LOCAL = MAX(RESULT, 0)
+;îÑãpämîF
+PRINTFORML %NAME:ARG%ÇÕ{LOCAL,10,RIGHT}ÉäÅ[ÉtÇ≈îÑÇÍÇªÇ§Ç≈Ç∑ÅB
+
+PRINTL îÑãpÇµÇ‹Ç∑Ç©ÅH
+PRINTL [0] ÇÕÇ¢
+PRINTL [1] Ç¢Ç¢Ç¶
+$INPUT_LOOPSALE
+INPUT
+IF RESULT == 0
+	;îÑãpéûå˚è„ï\é¶
+	CALL DISPLAY_KOJO_MESSAGE_SELL_CHARACTER, ARG
+	CALL DISPLAY_KOJO_MESSAGE_SELL_CHARACTER_ASSI, ARG
+
+	PRINTFORMW åãâ ÅA%NAME:ARG%ÇÕ{LOCAL,10,RIGHT}ÉäÅ[ÉtÇ≈îÑÇÍÇ‹ÇµÇΩÅB
+	MONEY += LOCAL
+	
+	CALL CHARA_GONE_DEL89, ARG
+	CALL CHARA_GONE, ARG, LOCAL:1, LOCAL:2
+	
+	DELCHARA ARG
+	
+ELSEIF RESULT != 1
+	GOTO INPUT_LOOPSALE
+ENDIF
+;-------------------------------------------------
+; ‡ÄàÛÇ™âüÇ≥ÇÍÇΩëäéËÇ™è¡é∏ÇµÇΩÇ∆Ç´ÇÃèàóù
+;-------------------------------------------------
+@CHARA_GONE_DEL89, ARG
+
+REPEAT CHARANUM
+	IF TALENT:COUNT:89
+		;
+		IF CFLAG:COUNT:789 == ARG
+			CFLAG:COUNT:789 = -1
+		ENDIF
+		
+		CALL DISPLAY_KOJO_MESSAGE_SELL_ADDICTION_CHARACTER, ARG, COUNT
+	ENDIF
+REND
+
+;-------------------------------------------------
+;ëŒè€orèïéËÇÃîÑãpÅEâï˙Ç…ÇÊÇÈìoò^çÌèúèàóù
+;-------------------------------------------------
+@CHARA_GONE, ARG, ARG:1, ARG:2
+
+IF ARG:1 < 0 || ARG:1 == ARG
+	TARGET = -1
+ELSE
+	TARGET = (ARG:1 > ARG) ? (ARG:1 - 1) # ARG:1
+ENDIF
+IF ARG:2 < 0 || ARG:2 == ARG
+	ASSI = -1
+ELSE
+	ASSI = (ARG:2 > ARG) ? (ARG:2 - 1) # ARG:2
+ENDIF
+;-------------------------------------------------
+; îÑãpâ¬î\Ç©Ç«Ç§Ç©îªíË
+;-------------------------------------------------
+@CHARA_SALE_CHECK, ARG
+SIF ABL:ARG:0+ABL:ARG:1 < 6
+	RETURN 0
+SIF ABL:ARG:3 < 3 && ABL:ARG:4 < 3 && ABL:ARG:5 < 3
+	RETURN 0
+SIF ABL:ARG:0 < 4 && (TALENT:ARG:11 || TALENT:ARG:12)
+	RETURN 0
+SIF ABL:ARG:1 < 4 && (TALENT:ARG:20 || TALENT:ARG:32 || TALENT:ARG:34)
+	RETURN 0
+
+S = 0
+SIF (ABL:ARG:2 >= 3 && ABL:ARG:6 >= 3) || (ABL:ARG:7 >= 3 && ABL:ARG:10 >= 2) || ABL:ARG:8 >= 3 || (ABL:ARG:3+ABL:ARG:4+ABL:ARG:5 >= 10) || ABL:ARG:0 == 5 || ABL:ARG:1 == 5
+	S = 1
+SIF S == 0
+	RETURN 0
+
+RETURN 1
+
+;=============================================================================
+;ÉLÉÉÉâîÑílåvéZèàóù
+;=============================================================================
+@SALE_CHARA, ARG:0
+
+G = ARG:0
+
+;ÉLÉÉÉâÇÃîÑílÇÇ±Ç±Ç≈éZèo
+;îÑãpÇÃåvéZ
+S = 0
+
+S = ITEMPRICE:(NO:G + 100) / 4
+
+IF TALENT:200
+	S = 10000
+ENDIF
+
+PRINTFORML äÓñ{îÑãpâøäi:{S}
+
+V = 0
+;ABL:è]èáÇÇ›ÇÈ
+IF ABL:G:0 == 0
+	V += 0
+ELSEIF ABL:G:0 == 1
+	V += 200
+ELSEIF ABL:G:0 == 2
+	V += 500
+ELSEIF ABL:G:0 == 3
+	V += 850
+ELSEIF ABL:G:0 == 4
+	V += 1500
+ELSE
+	V += 2500
+ENDIF
+SIF V > 0
+	PRINTFORM %ABLNAME:0,13,LEFT%{ABL:G:0}LV +{V} 
+S += V
+
+SIF V
+	PRINTFORML = {S}
+
+V = 0
+;ABL:ó~ñ]ÇÇ›ÇÈ
+IF ABL:G:1 == 0
+	V += 0
+ELSEIF ABL:G:1 == 1
+	V += 100
+ELSEIF ABL:G:1 == 2
+	V += 300
+ELSEIF ABL:G:1 == 3
+	V += 700
+ELSEIF ABL:G:1 == 4
+	V += 1200
+ELSE
+	V += 2000
+ENDIF
+SIF V > 0
+	PRINTFORM %ABLNAME:1,13,LEFT%{ABL:G:1}LV +{V} 
+S += V
+
+SIF V
+	PRINTFORML = {S}
+
+V = 0
+;ABL:ãZçIÇÇ›ÇÈ
+IF ABL:G:2 == 0
+	V += 0
+ELSEIF ABL:G:2 == 1
+	V += 100
+ELSEIF ABL:G:2 == 2
+	V += 200
+ELSEIF ABL:G:2 == 3
+	V += 400
+ELSEIF ABL:G:2 == 4
+	V += 700
+ELSE
+	V += 1600
+ENDIF
+SIF V > 0
+	PRINTFORM %ABLNAME:2,13,LEFT%{ABL:G:2}LV +{V} 
+S += V
+SIF V
+	PRINTFORML = {S}
+
+V = 0
+;ABL:é©à‘íÜì≈ÇÇ›ÇÈ
+IF ABL:G:10 == 0
+	V += 0
+ELSEIF ABL:G:10 == 1
+	V += 250
+ELSEIF ABL:G:10 == 2
+	V += 500
+ELSEIF ABL:G:10 == 3
+	V += 750
+ELSEIF ABL:G:10 == 4
+	V += 1000
+ELSE
+	V += 1300
+ENDIF
+SIF V > 0
+	PRINTFORM %ABLNAME:10,13,LEFT%{ABL:G:10}LV +{V} 
+S += V
+SIF V
+	PRINTFORML = {S}
+
+V = 0
+;ABL:ê∏âtíÜì≈ÇÇ›ÇÈ
+IF ABL:G:11 == 0
+	V += 0
+ELSEIF ABL:G:11 == 1
+	V += 300
+ELSEIF ABL:G:11 == 2
+	V += 600
+ELSEIF ABL:G:11 == 3
+	V += 900
+ELSEIF ABL:G:11 == 4
+	V += 1300
+ELSE
+	V += 1700
+ENDIF
+SIF V > 0
+	PRINTFORM %ABLNAME:11,13,LEFT%{ABL:G:11}LV +{V} 
+S += V
+SIF V
+	PRINTFORML = {S}
+
+V = 0
+;ABL:ê∏âtíÜì≈ÇÇ›ÇÈ
+IF ABL:G:12 == 0
+	V += 0
+ELSEIF ABL:G:12 == 1
+	V += 250
+ELSEIF ABL:G:12 == 2
+	V += 500
+ELSEIF ABL:G:12 == 3
+	V += 750
+ELSEIF ABL:G:12 == 4
+	V += 1000
+ELSE
+	V += 1300
+ENDIF
+SIF V > 0
+	PRINTFORM %ABLNAME:12,13,LEFT%{ABL:G:12}LV +{V} 
+S += V
+
+SIF V
+	PRINTFORML = {S}
+	
+
+V = 0
+;ABL:àÔïPÇÇ›ÇÈ
+IF TALENT:G:207
+	V += 2500
+ENDIF
+SIF V > 0
+	PRINTFORM %TALENTNAME:136,16,LEFT% +{V} 
+S += V
+
+SIF V
+	PRINTFORML = {S}
+	
+;--------------------------------------------
+;
+; TIMES
+;
+;--------------------------------------------
+
+V = 100
+;ABL:Çbä¥äoÇÇ›ÇÈ
+IF ABL:G:3 == 4
+	V = 110
+	TIMES S , 1.10
+ELSEIF ABL:G:3 == 5
+	V = 120
+	TIMES S , 1.20
+ENDIF
+SIF V != 100
+	PRINTFORML %ABLNAME:3,13,LEFT%{ABL:G:3}LV Å~{V/100}.{V%100} = {S}
+
+V = 100
+;ABL:Çuä¥äoÇÇ›ÇÈ
+IF ABL:G:4 == 3
+	V = 110
+	TIMES S , 1.10
+ELSEIF ABL:G:4 == 4
+	V = 120
+	TIMES S , 1.20
+ELSEIF ABL:G:4 == 5
+	V = 140
+	TIMES S , 1.40
+ENDIF
+SIF V != 100
+	PRINTFORML %ABLNAME:4,13,LEFT%{ABL:G:4}LV Å~{V/100}.{V%100} = {S}
+
+V = 100
+;ABL:Ç`ä¥äoÇÇ›ÇÈ
+IF ABL:G:5 == 2
+	V = 110
+	TIMES S , 1.10
+ELSEIF ABL:G:5 == 3
+	V = 120
+	TIMES S , 1.20
+ELSEIF ABL:G:5 == 4
+	V = 140
+	TIMES S , 1.40
+ELSEIF ABL:G:4 == 5
+	V = 160
+	TIMES S , 1.60
+ENDIF
+SIF V != 100
+	PRINTFORML %ABLNAME:5,13,LEFT%{ABL:G:5}LV Å~{V/100}.{V%100} = {S}
+
+V = 100
+;ABL:ïÚédê∏ê_ÇÇ›ÇÈ
+IF ABL:G:6 == 3
+	V = 110
+	TIMES S , 1.10
+ELSEIF ABL:G:6 == 4
+	V = 130
+	TIMES S , 1.30
+ELSEIF ABL:G:6 == 5
+	V = 150
+	TIMES S , 1.50
+ENDIF
+SIF V != 100
+	PRINTFORML %ABLNAME:6,13,LEFT%{ABL:G:6}LV Å~{V/100}.{V%100} = {S}
+
+V = 100
+;ABL:òIèoï»ÇÇ›ÇÈ
+IF ABL:G:7 == 3
+	V = 110
+	TIMES S , 1.10
+ELSEIF ABL:G:7 == 4
+	V = 130
+	TIMES S , 1.30
+ELSEIF ABL:G:7 == 5
+	V = 150
+	TIMES S , 1.50
+ENDIF
+SIF V != 100
+	PRINTFORML %ABLNAME:7,13,LEFT%{ABL:G:7}LV Å~{V/100}.{V%100} = {S}
+
+V = 100
+;ABL:É}É]Ç¡ãCÇÇ›ÇÈ
+IF ABL:G:8 == 1
+	V = 110
+	TIMES S , 1.10
+ELSEIF ABL:G:8 == 2
+	V = 130
+	TIMES S , 1.30
+ELSEIF ABL:G:8 == 3
+	V = 150
+	TIMES S , 1.50
+ELSEIF ABL:G:8 == 4
+	V = 200
+	TIMES S , 2.00
+ELSEIF ABL:G:8 == 5
+	V = 250
+	TIMES S , 2.50
+ENDIF
+SIF V != 100
+	PRINTFORML %ABLNAME:8,13,LEFT%{ABL:G:8}LV Å~{V/100}.{V%100} = {S}
+
+V = 100
+;ABL:ÉåÉYÇ¡ãCÇÇ›ÇÈ
+IF ABL:G:9 == 3
+	V = 110
+	TIMES S , 1.10
+ELSEIF ABL:G:9 == 4
+	V = 130
+	TIMES S , 1.30
+ELSEIF ABL:G:9 == 5
+	V = 150
+	TIMES S , 1.50
+ENDIF
+SIF V != 100
+	PRINTFORML %ABLNAME:9,13,LEFT%{ABL:G:9}LV Å~{V/100}.{V%100} = {S}
+
+V = 100
+;ABL:BLÇÇ›ÇÈ
+IF ABL:G:13 == 3
+	V = 110
+	TIMES S , 1.10
+ELSEIF ABL:G:13 == 4
+	V = 130
+	TIMES S , 1.30
+ELSEIF ABL:G:13 == 5
+	V = 150
+	TIMES S , 1.50
+ENDIF
+SIF V != 100
+	PRINTFORML %ABLNAME:13,13,LEFT%{ABL:G:13}LV Å~{V/100}.{V%100} = {S}
+
+;=========================================
+;
+; TALENT
+;
+;=========================================
+
+V = 100
+;TALENT:èàèóÇÇ›ÇÈ
+IF TALENT:G:0
+	;çƒê∂èàèóÇ»ÇÁ1.5î{
+	IF EXP:G:0 > 0
+		V = 150
+		TIMES S , 1.50
+	ELSE
+		V = 200
+		TIMES S , 2.00
+	ENDIF
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:0,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:ãCè‰ÇÇ›ÇÈ
+IF TALENT:G:12 && ABL:G:0 > 2
+	V = 120
+	TIMES S , 1.20
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:12,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:é©ë∏êSÇÇ›ÇÈ
+IF TALENT:G:15 && ABL:G:0 > 2
+	V = 120
+	TIMES S , 1.20
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:15,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:é©êßêSÇÇ›ÇÈ
+IF TALENT:G:20 && ABL:G:1 < 4
+	V = 80
+	TIMES S , 0.80
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:20,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:ñ≥ä÷êSÇÇ›ÇÈ
+IF TALENT:G:21 && ABL:G:1 < 4
+	V = 80
+	TIMES S , 0.80
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:21,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:ä¥èÓñRÇµÇ¢ÇÇ›ÇÈ
+IF TALENT:G:22 && ABL:G:1 < 4
+	V = 80
+	TIMES S , 0.80
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:22,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:ï€éÁìIÇÇ›ÇÈ
+IF TALENT:G:24 && ABL:G:1 < 4
+	IF ASSI < 0
+		V = 50
+		TIMES S , 0.50
+	ELSEIF RELATION:G:ASSI >= 200
+		V = 100
+		TIMES S , 1.00
+	ELSE
+		V = 50
+		TIMES S , 0.50
+	ENDIF
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:24,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:àÍê¸âzÇ¶Ç»Ç¢ÇÇ›ÇÈ
+IF TALENT:G:27 && ABL:G:0 < 4
+	V = 80
+	TIMES S , 0.80
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:27,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:âï˙ÇÇ›ÇÈ
+IF TALENT:G:33
+	V = 120
+	TIMES S , 1.20
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:33,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:îGÇÍÇ‚Ç∑Ç¢ÇÇ›ÇÈ
+IF TALENT:G:42
+	V = 120
+	TIMES S , 1.20
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:42,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:âıä¥Ç…ëfíºÇÇ›ÇÈ
+IF TALENT:G:70 && ABL:G:1 > 2
+	V = 120
+	TIMES S , 1.20
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:70,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:âıä¥ÇÃî€íËÇÇ›ÇÈ
+IF TALENT:G:71 && ABL:G:1 < 4
+	V = 60
+	TIMES S , 0.60
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:71,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:ë¶óéÇøÇÇ›ÇÈ
+IF TALENT:G:73
+	V = 80
+	TIMES S , 0.80
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:73,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:ì|çˆìIÇÇ›ÇÈ
+IF TALENT:G:80 && ABL:G:1 > 2
+	V = 120
+	TIMES S , 1.20
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:80,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:ìÆï®ÇÇ›ÇÈ
+IF TALENT:G:92
+	V = 120
+	TIMES S , 1.20
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:92,16,LEFT% Å~{V/100}.{V%100} = {S}
+	
+V = 100
+;TALENT:ê„égÇ¢ÇÇ›ÇÈ
+IF TALENT:G:52
+	V = 150
+	TIMES S , 1.50
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:52,16,LEFT% Å~{V/100}.{V%100} = {S}
+	
+V = 100
+;TALENT:îLê„ÇÇ›ÇÈ
+IF TALENT:G:96
+	V = 80
+	TIMES S , 0.80
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:96,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:Çbì›ä¥ÇÇ›ÇÈ
+IF TALENT:G:101 && ABL:G:3 < 4
+	V = 80
+	TIMES S , 0.80
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:101,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:Çbïqä¥ÇÇ›ÇÈ
+IF TALENT:G:102 && ABL:G:3 > 2
+	V = 110
+	TIMES S , 1.10
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:102,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:Çuì›ä¥ÇÇ›ÇÈ
+IF TALENT:G:103 && ABL:G:4 < 4
+	V = 80
+	TIMES S , 0.80
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:103,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:Çuïqä¥ÇÇ›ÇÈ
+IF TALENT:G:104 && ABL:G:4 > 2
+	V = 120
+	TIMES S , 1.20
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:104,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:Ç`ì›ä¥ÇÇ›ÇÈ
+IF TALENT:G:105 && ABL:G:5 < 4
+	V = 90
+	TIMES S , 0.90
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:105,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:Ç`ïqä¥ÇÇ›ÇÈ
+IF TALENT:G:106 && ABL:G:5 > 2
+	V = 130
+	TIMES S , 1.30
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:106,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:ãêì˚ÇÇ›ÇÈ
+IF TALENT:G:110
+	V = 150
+	TIMES S , 1.50
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:110,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:âÒïúëÅÇ¢ÇÇ›ÇÈ
+IF TALENT:G:111
+	V = 120
+	TIMES S , 1.20
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:111,16,LEFT% Å~{V/100}.{V%100} = {S}
+	
+V = 100
+;TALENT:èÌÇ…êáñ∞ÇÇ›ÇÈ
+IF TALENT:G:88
+	V = 150
+	TIMES S , 1.50
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:88,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:ñ£óÕÇÇ›ÇÈ
+IF TALENT:G:113
+	V = 150
+	TIMES S , 1.50
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:113,16,LEFT% Å~{V/100}.{V%100} = {S}
+	
+;à√à≈
+V = 100
+IF TALENT:G:98
+	V = 200
+	TIMES S , 2.00
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:98,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;î¸ì˚
+IF TALENT:G:132
+	V = 200
+	TIMES S , 2.00
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:132,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+;TALENT:Ç”ÇΩÇ»ÇËÇÇ›ÇÈ
+IF TALENT:G:121
+	V = 200
+	TIMES S , 2.00
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:121,16,LEFT% Å~{V/100}.{V%100} = {S}
+	
+V = 100
+; ÉPÉÇé®Çå©ÇÈ
+IF TALENT:G:95
+	V = 200
+	TIMES S , 2.00
+ENDIF
+IF V != 100
+	PRINTFORML %TALENTNAME:95,16,LEFT% Å~{V/100}.{V%100} = {S}
+ENDIF
+	
+V = 100
+; àÔïPÇå©ÇÈ
+IF TALENT:G:207
+	V = 400
+	TIMES S , 4.00
+ENDIF
+IF V != 100
+	PRINTFORML %TALENTNAME:207,16,LEFT% Å~{V/100}.{V%100} = {S}
+ENDIF
+
+V = 100
+; åœÇå©ÇÈ
+IF TALENT:G:93
+	V = 200
+	TIMES S , 2.00
+ENDIF
+IF V != 100
+	PRINTFORML %TALENTNAME:93,16,LEFT% Å~{V/100}.{V%100} = {S}
+ENDIF
+
+V = 100
+;Ç`ñºäÌ
+IF TALENT:G:131
+	V = 225
+	TIMES S , 2.25
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:131,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+;ñºäÌÇ©Ç¬èàèó
+V = 100
+IF TALENT:G:130 && TALENT:G:0
+	V = 150
+	TIMES S , 1.50
+ENDIF
+IF V != 100
+	STR:82 = %TALENTNAME:0% Ç©Ç¬ %TALENTNAME:130%
+	PRINTFORML %STR:82,16,LEFT% Å~{V/100}.{V%100} = {S}
+ENDIF
+
+V = 100
+;TALENT:ñºäÌÇÇ›ÇÈ
+IF TALENT:G:130
+	V = 400
+	TIMES S , 4.00
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:130,16,LEFT% Å~{V/100}.{V%100} = {S}
+	
+V = 100
+;TALENT:ëSêgñºäÌÇÇ›ÇÈ
+IF TALENT:G:133
+	V = 200
+	TIMES S , 2.00
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:133,16,LEFT% Å~{V/100}.{V%100} = {S}
+
+V = 100
+; ìÔí≤ã≥Çå©ÇÈ
+IF TALENT:G:200
+	V = 400
+	TIMES S , 4.00
+ENDIF
+IF V != 100
+	PRINTFORML %TALENTNAME:200,16,LEFT% Å~{V/100}.{V%100} = {S}
+ENDIF
+
+
+
+V = 100
+; âiâìÇÃâ≥èóÇå©ÇÈ
+IF TALENT:G:269
+	V = 800
+	TIMES S , 8.00
+ENDIF
+IF V != 100
+	PRINTFORML %TALENTNAME:269,16,LEFT% Å~{V/100}.{V%100} = {S}
+ENDIF
+
+
+
+V = 100
+;TALENT:ÉIÉgÉRÇÇ›ÇÈ
+;TALENT:ñ£óÕÇ»ÇÁëÂè‰ïv
+IF TALENT:G:122 && TALENT:G:113 == 0
+	IF ABL:G:0 < 2 || ABL:G:1 < 2 || ABL:G:13 < 1
+		V = 20
+		TIMES S , 0.20
+	ELSEIF ABL:G:0 < 3 || ABL:G:1 < 3 || ABL:G:13 < 2
+		V = 40
+		TIMES S , 0.40
+	ELSEIF ABL:G:0 < 4 || ABL:G:1 < 4 || ABL:G:13 < 3
+		V = 70
+		TIMES S , 0.70
+	ENDIF
+ENDIF
+SIF V != 100
+	PRINTFORML %TALENTNAME:122,16,LEFT% Å~{V/100}.{V%100} = {S}
+	
+V = 100
+;èïéËÇîÑÇÈ
+IF ISASSI:G > 0
+	V = 50
+	TIMES S , 0.60
+ENDIF
+SIF V != 100
+	PRINTFORML å≥èïéË           Å~{V/100}.{V%100} = {S}
+
+LOCAL:1 = S
+
+;ílÇ™ó~ÇµÇ¢èÍçáÇ…îıÇ¶Çƒï€ë∂
+RESULT:1 = LOCAL:3
+RESULT:2 = LOCAL:2
+RETURN LOCAL:1

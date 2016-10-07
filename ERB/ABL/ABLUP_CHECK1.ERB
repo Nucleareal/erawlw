@@ -1,0 +1,130 @@
+;ARG->実行する番号(-1でチェックのみ, -2で表示あり), ARG:1->チェックする奴隷
+
+;======================v ここ
+@CHECK_ABLUP_AVAILABLE_1, ARG, ARG:1
+
+IF ARG:1 == 0
+	ARG:1 = TARGET
+ENDIF
+
+VARSET LOCAL, 0
+
+;TARGETを避難
+LOCAL:0 = TARGET
+TARGET = ARG:1
+
+;既にLv5
+;======v ここ
+IF ABL:1 >= 5
+	SIF ARG == -2
+		PRINTW 既にMAXです
+	RETURN 0
+ENDIF
+
+;LOCAL:1 条件1
+;LOCAL:2
+;LOCAL:3
+;LOCAL:4
+
+;結果
+;LOCAL:998
+
+;臆病をみて、あるなら1
+LOCAL:100 = TALENT:10
+
+;==============v ここ
+SELECTCASE ABL:1
+	CASE 0
+		LOCAL:50 = 5
+	CASE 1
+		LOCAL:50 = 50
+	CASE 2
+		LOCAL:50 = 1000
+	CASE 3
+		LOCAL:50 = 8000
+	CASE 4
+		LOCAL:50 = 24000
+ENDSELECT
+
+IF TALENT:27
+;==================v ここ
+	SELECTCASE ABL:1
+		CASE 3
+			TIMES LOCAL:50 , 2.00
+		CASE 4
+			TIMES LOCAL:50 , 3.00
+	ENDSELECT
+ENDIF
+
+;[プライド高い]
+SIF TALENT:15
+	TIMES LOCAL:50 , 1.50
+
+;性質チェック
+
+;Lv4 -> Lv5
+IF ABL:1 == 4
+	;[快感に素直]なら無視
+	IF TALENT:70 == 0
+		SIF ARG == -2
+			PRINTFORML %EXPNAME:50%あり、かつ
+		IF EXP:50 == 0
+			LOCAL:1 |= 2
+		ENDIF
+	ENDIF
+ENDIF
+
+;欲情の珠で上げる
+SIF LOCAL:50 > 0 && JUEL:5 < LOCAL:50
+	LOCAL:1 |= 1
+
+;チェックのみなら返却
+IF ARG == -1
+	TARGET = LOCAL:0
+	
+	SIF LOCAL:1 == 0
+		RETURN 1
+		
+	RETURN 0
+ENDIF
+
+IF ARG == -2
+	IF LOCAL:50 > 0
+		CALL PRINT_UPGRADE_AVAILABLE_PREFIX, LOCAL:1, 0
+		CALL PRINT_UPGRADE_AVAILABLE_JUEL, 5, LOCAL:50
+		CALL PRINT_UPGRADE_AVAILABLE_STATUS, LOCAL:1
+		CALL PRINT_UPGRADE_AVAILABLE_POSTFIX, LOCAL:1
+	ENDIF
+	
+	PRINTL [10] - やめる
+ENDIF
+
+INPUT
+SIF RESULT == 10
+	RETURN 0
+
+IF RESULT < 0 || RESULT > 0
+	RESTART
+ENDIF
+
+IF (LOCAL:1 && RESULT == 0)
+	PRINTL 条件を満たしていません
+	RESTART
+ENDIF
+
+;===v ここ
+ABL:1 += 1
+
+;===============================v ここ===v ここ
+PRINTFORMW %CALLNAME%の%ABLNAME:1%が{ABL:1}になりました
+
+SELECTCASE RESULT
+	CASE 0
+		JUEL:5 -= LOCAL:50
+ENDSELECT
+
+TARGET = LOCAL:0
+
+;=========================================v ここ=v ここ
+CALL DISPLAY_KOJO_MESSAGE_PALAMCNG_SLAVE, 1, ABL:1
+CALL DISPLAY_KOJO_MESSAGE_PALAMCNG_ASSI, 1, ABL:1

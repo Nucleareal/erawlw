@@ -1,0 +1,246 @@
+;=============================================================================
+;キャラ購入における解説と購入確認処理
+;=============================================================================
+;キャラ購入時に解説を入れる
+;--------------------------------------------------
+;SHOPからの表示
+;--------------------------------------------------
+@CHARA_MANUAL
+DRAWLINE
+;キャラ解説本体の関数へ
+CALL CHARA_PROFILE
+
+;追加情報
+CALL SHOW_ADDITIONAL_INFO, TFLAG:201
+
+DRAWLINE
+PRINTL 購入しますか？
+PRINTL [0]はい
+PRINTL [1]いいえ
+
+$INPUT_LOOP
+INPUT
+IF RESULT == 1
+	TFLAG:201 = 0
+ELSEIF RESULT != 0
+	GOTO INPUT_LOOP
+ENDIF
+
+RETURN 0
+;--------------------------------------------------
+;追加情報表示
+;--------------------------------------------------
+@SHOW_ADDITIONAL_INFO, ARG
+
+VARSET LOCAL, 0
+
+CALL CALC_TRAIN_DIFFICULTY, ARG
+LOCAL = RESULT
+
+DEBUGPRINTFORML 難易度指数:{LOCAL}
+
+;LOCAL:1
+
+CALL CONVERT_TRAIN_DIFFICULTY, LOCAL
+LOCAL:1 = RESULT
+
+CALL PRINT_DIFFICULTY, LOCAL:1
+
+RETURN 0
+;--------------------------------------------------
+;キャラ解説本体
+;--------------------------------------------------
+@CHARA_PROFILE
+
+PRINTFORML 【%ITEMNAME:(TFLAG:201+100)%】{ITEMSALES:(TFLAG:201+100)}リーフ
+
+SELECTCASE TFLAG:201
+	CASE 1
+		PRINTL ここに説明を入れます
+		PRINTL [初期資金で購入可能]
+	CASE 2
+		PRINTL ここに説明を入れます
+	CASE 3
+		PRINTL ここに説明を入れます
+		PRINTL [初期資金で購入可能]
+	CASE 4
+		PRINTL ここに説明を入れます
+	CASE 5
+		PRINTL ここに説明を入れます
+	CASE 6
+		PRINTL ここに説明を入れます
+	CASE 7
+		PRINTL ここに説明を入れます
+	CASE 8
+		PRINTL ここに説明を入れます
+	CASE 9
+		PRINTL ここに説明を入れます
+	CASE 10
+		PRINTL ここに説明を入れます
+	CASE 11
+		PRINTL ここに説明を入れます
+	CASE 12
+		PRINTL ここに説明を入れます
+	CASE 13
+		PRINTL ここに説明を入れます
+	CASE 14
+		PRINTL ここに説明を入れます
+;男性陣
+	CASE 33
+		PRINTL ここに説明を入れます
+	CASE 34
+		PRINTL ここに説明を入れます
+	CASE 35
+		PRINTL ここに説明を入れます
+	CASE 36
+		PRINTL ここに説明を入れます
+	CASE 37
+		PRINTL ここに説明を入れます
+	CASE 38
+		PRINTL ここに説明を入れます
+	CASE 39
+		PRINTL ここに説明を入れます
+	CASE 40
+		PRINTL ここに説明を入れます
+	CASE 41
+		PRINTL ここに説明を入れます
+ENDSELECT
+
+RETURN 0
+
+;ARG: NO:LIST_REGISTERED
+@CALC_TRAIN_DIFFICULTY, ARG
+
+VARSET LOCAL, 0
+
+ADDCHARA ARG
+LOCAL:1 = TARGET
+TARGET = CHARANUM - 1
+
+;LOCAL: 難易度(+なら楽, -なら苦難)
+
+CALL CALC_TRAIN_DIFFICULTY_DO, TARGET
+LOCAL = RESULT
+	
+TARGET = LOCAL:1
+DELCHARA CHARANUM - 1
+
+V:8 = LOCAL
+	
+RETURN V:8
+
+@PRINT_DIFFICULTY, ARG
+
+PRINT 調教難易度【難しい】
+
+IF ARG == 9
+	SETCOLOR 255, 0, 255
+	FONTSTYLE 1
+	PRINTFORM  神 
+	FONTSTYLE 0
+	RESETCOLOR
+ELSE
+	PRINT  神 
+ENDIF
+PRINT |
+
+IF ARG == 8
+	SETCOLOR 255, 0, 255
+	FONTSTYLE 1
+	PRINTFORM  筆 
+	FONTSTYLE 0
+	RESETCOLOR
+ELSE
+	PRINT  筆 
+ENDIF
+PRINT |
+
+IF ARG == 7
+	SETCOLOR 255, 0, 0
+	PRINTFORM  Ｓ 
+	RESETCOLOR
+ELSE
+	PRINT  Ｓ 
+ENDIF
+PRINT |
+
+IF ARG == 6
+	SETCOLOR 255, 0, 0
+	PRINTFORM  ＡＡ 
+	RESETCOLOR
+ELSE
+	PRINT  ＡＡ 
+ENDIF
+PRINT |
+
+IF ARG == 5
+	SETCOLOR 255, 127, 0
+	PRINTFORM  Ａ 
+	RESETCOLOR
+ELSE
+	PRINT  Ａ 
+ENDIF
+PRINT |
+
+IF ARG == 4
+	SETCOLOR 255, 127, 0
+	PRINTFORM  Ｂ 
+	RESETCOLOR
+ELSE
+	PRINT  Ｂ 
+ENDIF
+PRINT |
+
+IF ARG == 3
+	SETCOLOR 0, 255, 0
+	PRINTFORM  Ｃ 
+	RESETCOLOR
+ELSE
+	PRINT  Ｃ 
+ENDIF
+PRINT |
+
+IF ARG == 2
+	SETCOLOR 0, 255, 0
+	PRINTFORM  Ｄ 
+	RESETCOLOR
+ELSE
+	PRINT  Ｄ 
+ENDIF
+PRINT |
+
+IF ARG == 1
+	SETCOLOR 0, 255, 255
+	PRINTFORM  Ｅ 
+	RESETCOLOR
+ELSE
+	PRINT  Ｅ 
+ENDIF
+PRINT |
+
+IF ARG == 0
+	SETCOLOR 0, 255, 255
+	PRINTFORM  ビギナー 
+	RESETCOLOR
+ELSE
+	PRINT  ビギナー 
+ENDIF
+PRINT |
+
+PRINTL 【簡単】
+
+RETURN 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
