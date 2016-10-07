@@ -2,3 +2,5 @@ sav/
 debug/
 *.exe
 *.lnk
+*.log
+emuera.config
