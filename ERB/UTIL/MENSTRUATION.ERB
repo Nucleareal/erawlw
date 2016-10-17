@@ -3,6 +3,9 @@
 ;生理モードが有効ではない
 SIF MENSTRUATION_AVAILABLE == 0
 	RETURNF 0
+	
+SIF TALENT:ARG:157
+	RETURNF 0
 
 ;オトコは生理が来ない(悲しい)
 SIF TALENT:ARG:122
@@ -28,22 +31,47 @@ RETURNF 1
 #FUNCTION
 
 VARSET LOCAL, 0
+VARSET M, 0
 
 LOCAL = CAN_CHARACTER_MENSTRUATION_CHECK(ARG)
 SIF LOCAL == 0
 	RETURNF 0
 
+;LOCALを生理周期中何日目かに更新
 LOCAL = CFLAG:ARG:505 % CFLAG:ARG:506
 
-SIF LOCAL < CFLAG:ARG:507
+;生理中
+IF LOCAL < CFLAG:ARG:507
+	;何日目か
+	M:0 = LOCAL + 1
 	RETURNF 1
+ENDIF
 	
+;排卵開始日
 LOCAL:1 = CFLAG:ARG:506 * 100 / 2
+;生理周期中何日目か
 LOCAL:2 = LOCAL * 100
+;排卵終了日
 LOCAL:3 = LOCAL:1 + CFLAG:ARG:507 * 100
+;周期
+LOCAL:4 = CFLAG:ARG:506 * 100
 
-SIF LOCAL:2 >= LOCAL:1 && LOCAL:2 < LOCAL:3
+;排卵待ち
+IF LOCAL:2 < LOCAL:1
+	M:0 = (LOCAL:1 - LOCAL:2) / 100
+	M:1 = -1
+ELSE
+	M:0 = (LOCAL:4 - LOCAL:2) / 100
+	M:1 = 1
+ENDIF
+
+;排卵中
+IF LOCAL:2 >= LOCAL:1 && LOCAL:2 < LOCAL:3
+	M:0 = (LOCAL:2 - LOCAL:1) / 100 + 1
 	RETURNF -1
+ENDIF
+
+
 
 RETURNF 0
 
@@ -163,6 +191,29 @@ SELECTCASE LOCAL
 	;シャリス(タイプ:猫)
 	CASE 4
 		RETURNF 1
+	;EXサンドリヨン(タイプ:狐)
+	CASE 69
+		RETURNF 2
 ENDSELECT
 
 RETURNF 0
+
+;------------------------------------------------------------
+; 生理パラメータ設定
+;------------------------------------------------------------
+@INITIAL_MENSTRUATION, ARG
+
+;初経前
+SIF TALENT:ARG:157
+	RETURN 0
+
+;生理パラメータ設定
+IF CAN_CHARACTER_MENSTRUATION_CHECK(ARG)
+	LOCAL:100 = ARG
+
+	CFLAG:(LOCAL:100):507 = 3 + RAND(5)
+	CFLAG:(LOCAL:100):506 = 28 + RAND(4) - RAND(4)
+	CFLAG:(LOCAL:100):505 = RAND(CFLAG:(LOCAL:100):506)
+	
+	DEBUGPRINTFORML 生理設定完了: (長さ{CFLAG:(LOCAL:100):507} 周期{CFLAG:(LOCAL:100):506} 初期化{CFLAG:(LOCAL:100):505})
+ENDIF

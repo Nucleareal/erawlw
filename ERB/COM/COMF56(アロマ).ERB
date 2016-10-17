@@ -1,0 +1,59 @@
+@COM56
+TSTR:0 = アロマ(サイプレス)
+CALL DISPLAY_KOJO_TRAIN_MESSAGE_F_COM
+
+;気分を落ち着かせるアロマ(主にマイナスパラメータの減少)
+
+;アロマによる体力/気力の減少
+LOSEBASE:0 += 30
+LOSEBASE:1 += 30
+
+;逸脱
+SOURCE:14 = 200
+
+;不快30低下
+DOWN:12 = 300
+
+;薬毒耐性
+IF TALENT:44
+	TIMES DOWN:10 , 0.5
+	TIMES DOWN:12 , 0.5
+ENDIF
+
+ITEM:26 -= 1
+;ポットを使用中にする
+TEQUIP:12 = 1
+;ローズを使用中にする
+TEQUIP:25 = 1
+
+IF TALENT:122 == 0 && TALENT:PLAYER:122 == 0
+	PRINTS EXPNAME:40
+	PRINTL +1
+	EXP:40 += 1
+
+	SIF PLAYER != MASTER
+		EXP:PLAYER:40 += 1
+
+ELSEIF TALENT:122 == 1 && TALENT:PLAYER:122 == 1
+	PRINTS EXPNAME:41
+	PRINTL +1
+	EXP:41 += 1
+ENDIF
+
+RETURN 1
+
+@EQUIP_COM26
+;アロマ(サイプレス)中
+
+PRINTL ＜アロマ(サイプレス)＞
+
+;逸脱
+SOURCE:14 = 10
+
+;不快30低下
+DOWN:12 = 300
+
+;薬毒耐性
+IF TALENT:44
+	TIMES DOWN:12 , 0.5
+ENDIF

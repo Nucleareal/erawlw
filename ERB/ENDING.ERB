@@ -8,7 +8,7 @@ VARSET LOCAL, 0
 IF TARGET != -1
 	;名器に溺れる
 	;素質チェック
-	IF TALENT:130 && CFLAG:500 >= 10
+	IF TALENT:130 && CFLAG:MASTER:508 >= 40
 		;能力チェック
 		;従順4以上、欲望5以上、技巧4以上、奉仕精神4以上、精液中毒4以上
 		IF ABL:0 >= 4 && ABL:1 >= 5 && ABL:2 >= 4 && ABL:6 >= 4 && ABL:11 >= 4
@@ -16,57 +16,6 @@ IF TARGET != -1
 			SIF MARK:1 >= 3 && MARK:2 >= 3 && MARK:3 <= 1
 				CALL ENDING_MEIKI
 		ENDIF
-	ENDIF
-
-	S = 0
-	; 主人と結婚
-	;能力チェック
-	IF ABL:0 >= 5 && ABL:1 >= 5 && ABL:6 >= 3 && ABL:7 <= 3 && ABL:9 < 3 && ABL:12 < 1
-		IF MARK:0 <= 1 && MARK:3 < 1
-			S = 1
-			;エンゲージリングを持っている
-			IF ITEM:5
-				Z:4 = 0
-				CALL DISPLAY_KOJO_JUDGE_SINGLE_ENDING
-				
-				SIF Z:4 == 0
-					CALL ENDING_MARRY_JUDGE_INPUT
-			ENDIF
-		ENDIF
-	ENDIF
-	IF S
-		ITEMSALES:5 = 1
-	ELSE
-		ITEMSALES:5 = 0
-	ENDIF
-	
-	S = 0
-	; レズ結婚
-	IF ASSI > 0
-		L = NO:ASSI
-		M = NO:TARGET
-		IF RELATION:ASSI:M > 100 && RELATION:TARGET:L > 100
-			;能力を見る
-			IF ABL:0 >= 4 && ABL:ASSI:0 >= 4 && ABL:1 >= 5 && ABL:ASSI:1 >= 5 && ABL:ASSI:2 >= 3
-				IF ABL:7 <= 3 && ABL:ASSI:7 <= 3 && ABL:9 >= 5 && ABL:ASSI:9 >= 5 && ABL:11 < 1 && ABL:ASSI:11 < 1 && ABL:12 >= 3 && ABL:ASSI:12 >= 3
-					IF MARK:0 <= 1 && MARK:3 < 1 && MARK:ASSI:0 <= 1 && MARK:ASSI:3 < 1
-						S = 1
-						IF ITEM:6
-							Z:5 = 0
-							CALL DISPLAY_KOJO_JUDGE_LESBIAN_ENDING
-							
-							SIF Z:5 == 0
-								CALL ENDING_MARRY_LESBIAN_JUDGE_INPUT
-						ENDIF
-					ENDIF
-				ENDIF
-			ENDIF
-		ENDIF
-	ENDIF
-	IF S
-		ITEMSALES:6 = 1
-	ELSE
-		ITEMSALES:6 = 0
 	ENDIF
 	
 	;百合の楽園

@@ -1,4 +1,5 @@
 @EVENTFIRST
+;一番最初に実行されるなんやかんや
 
 ;変数初期化
 MASTER =  0
@@ -18,8 +19,10 @@ DAY:103 = 60
 DAY:111 = 365
 MONEY:101 = 1000000
 MONEY:102 = 1500000
-MONEY:103 = 3000000
+MONEY:103 = 2500000
 MONEY:111 = 0
+
+CALL INITIALIZE_USER_VARIABLES
 
 
 ;ゲームモード選択
@@ -91,11 +94,16 @@ IF PLAYER == MASTER
 	ENDIF
 ENDIF
 
+;-------------------------------------------------
+; ターンエンド
+;-------------------------------------------------
 ;ターンエンド
 @EVENTTURNEND
 
 SIF FLAG:0
 	CALL PASSIVE_REST
+	
+;生理不安定の処理
 
 REPEAT CHARANUM
 	;体力の回復（午後の調教後は夜の休みが入るので回復大きい）
@@ -122,6 +130,11 @@ REPEAT CHARANUM
 
 	;気力の回復
 	BASE:COUNT:1 = MAXBASE:COUNT:1
+	
+	;生理不安定の処理
+	IF TALENT:COUNT:158
+		CALL INITIAL_MENSTRUATION, COUNT
+	ENDIF
 REND
 
 FLAG:0 = 0
@@ -143,7 +156,9 @@ BEGIN SHOP
 
 
 
-
+;-------------------------------------------------
+; ゲームモード選択
+;-------------------------------------------------
 @SELECT_GAMEMODE
 FLAG:4 = 0
 
@@ -180,7 +195,7 @@ ELSEIF RESULT == 10
 ELSEIF RESULT == 99
 	DRAWLINE
 	PRINTL STORY     ：【期限あり】普通にプレイをする人向け
-	PRINTL ABNORMAL  ：【期限あり】女主人公で始めたい人向け
+	PRINTL ABNORMAL  ：【期限あり】特殊主人公で始めたい人向け
 	PRINTL PRACTICE  ：【期限なし】練習用モード
 	DRAWLINE
 	WAIT
@@ -199,14 +214,20 @@ ELSE
 ENDIF
 
 
-
-;性別設定
+;-------------------------------------------------
+; MASTERの素質設定
+;-------------------------------------------------
+;性別、その他設定
 @SET_MASTER_SEX
+
+VARSET LOCAL , 0
+VARSET LOCALS , 
+
 PRINTL あなたの性別は？
-PRINTLC [0]♂
-PRINTLC [1]♀
+PRINTLC [0] - ♂
+PRINTLC [1] - ♀
 PRINTL 
-$INPUT_LOOP_5
+$INPUT_LOOP_10
 INPUT
 IF RESULT == 0
 	;男なら処女はない
@@ -233,7 +254,7 @@ ELSEIF RESULT == 1
 	MAXBASE:MASTER:2 = 0
 	PRINTW ♀で始めます
 	
-ELSEIF RESULT == 6576736769
+ELSEIF RESULT == 69
 	;処女
 	TALENT:MASTER:0 = 1
 	;ふたなり
@@ -249,8 +270,57 @@ ELSEIF RESULT == 6576736769
 	
 	PRINTW ふたなりで始めます
 ELSE
-	GOTO INPUT_LOOP_5
+	CLEARLINE 1
+	REUSELASTLINE 正しい値を入力して下さい
+	GOTO INPUT_LOOP_10
 ENDIF
+LOCAL:0 = RESULT
+
+
+
+LOCALS:0 = \@LOCAL:0 == 1 ? ロリ # 小柄\@
+PRINTL あなたの体型は？
+PRINTLC [0] - 普通体型
+PRINTFORMLC [1] - \@LOCAL:0 == 0 ? ショタ # %LOCALS:0%\@体型
+PRINTL
+$INPUT_LOOP_11
+INPUT
+SELECTCASE RESULT
+	CASE 0
+		TALENT:MASTER:100 = 0
+		PRINTW 普通体型で始めます
+	CASE 1
+		TALENT:MASTER:100 = 1
+		PRINTFORMW [%TALENTNAME:100%]で始めます
+	CASEELSE
+		CLEARLINE 1
+		REUSELASTLINE 正しい値を入力して下さい
+		GOTO INPUT_LOOP_11
+ENDSELECT
+
+
+PRINTL あなたの乳の大きさは？
+PRINTLC [0] - 貧乳
+PRINTLC [1] - 普乳
+PRINTFORMLC [2] - %TALENTNAME:110%
+PRINTL
+$INPUT_LOOP_12
+INPUT
+SELECTCASE RESULT
+	CASE 0
+		TALENT:MASTER:110 = 0
+		PRINTFORMW 貧乳で始めます
+	CASE 1
+		TALENT:MASTER:110 = 0
+		PRINTFORMW 普乳で始めます
+	CASE 2
+		TALENT:MASTER:110 = 1
+		PRINTFORMW %TALENTNAME:110%で始めます
+	CASEELSE
+		CLEARLINE 1
+		REUSELASTLINE 正しい値を入力して下さい
+		GOTO INPUT_LOOP_12
+ENDSELECT
 
 ;そこまで影響はないがイメージ的に初期の体力・気力を変更。単なるイメージってことで
 MAXBASE:MASTER:0 = (TALENT:MASTER:122) ? 2500 # 1800
@@ -260,9 +330,13 @@ MAXBASE:MASTER:1 = (TALENT:MASTER:122) ? 2000 # 1500
 BASE:MASTER:0 = MAXBASE:MASTER:0
 BASE:MASTER:1 = MAXBASE:MASTER:1
 
-PRINTL
+PRINTFORMW あなたの設定が完了しました
+
 DRAWLINE
 
+;----------------------------------------------------------
+; 難易度選択
+;----------------------------------------------------------
 @SELECT_DIFFICULTY
 DRAWLINE
 PRINTL 難易度を選択してください
@@ -289,9 +363,6 @@ IF RESULT == 100
 	PRINTL 究極の調筆使い   : 選択するな
 	DRAWLINE
 	WAIT
-	DRAWLINE
-	DRAWLINE
-	DRAWLINE
 	RESTART
 ELSEIF RESULT == 1
 	PRINTW 難易度「初心者調筆使い」を選択しました
@@ -303,6 +374,7 @@ ELSEIF RESULT == 3
 ELSEIF RESULT == 365
 	PRINTW 難易度「究極の調筆使い」を選択しました
 	
+	;技巧を1にする
 	ABL:MASTER:2 = 1
 	
 	VARSET LOCAL , 0
@@ -319,22 +391,7 @@ ELSE
 	GOTO INPUT_LOOP_DIFFICULTY
 ENDIF
 
-SELECTCASE FLAG:3
-	CASE 1
-		FLAG:998 = MONEY:101
-	CASE 2
-		FLAG:998 = MONEY:102
-	CASE 3
-		FLAG:998 = MONEY:103
-ENDSELECT
-
-SELECTCASE FLAG:3
-	CASE 1
-		FLAG:999 = DAY:101
-	CASE 2
-		FLAG:999 = DAY:102
-	CASE 3
-		FLAG:999 = DAY:103
-	CASE 365
-		FLAG:999 = DAY:111
-ENDSELECT
+FLAG:998 = MONEY:(100 + FLAG:3)
+FLAG:999 = DAY:(100 + FLAG:3)
+SIF FLAG:3 == 365
+	FLAG:999 = DAY:111

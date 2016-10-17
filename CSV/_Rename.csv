@@ -85,6 +85,8 @@ TALENT:110 , 素質:巨乳
 TALENT:111 , 素質:回復早い
 TALENT:112 , 素質:回復遅い
 TALENT:113 , 素質:魅力
+TALENT:114 , 素質:貧乳
+TALENT:115 , 素質:素足
 TALENT:120 , 素質:不思議な根
 TALENT:121 , 素質:ふたなり
 TALENT:122 , 素質:オトコ
@@ -97,11 +99,19 @@ TALENT:135 , 素質:淫核
 TALENT:136 , 素質:魔壺
 TALENT:137 , 素質:魔菊
 TALENT:140 , 素質:オナホ
-TALENT:150 , 素質:発情Lv1
-TALENT:151 , 素質:発情Lv2
-TALENT:152 , 素質:発情Lv3
+TALENT:150 , 素質:発情可能(猫)
+TALENT:151 , 素質:発情可能(魚)
 TALENT:155 , 素質:生理重い
 TALENT:156 , 素質:生理軽い
+TALENT:157 , 素質:初経前
+TALENT:158 , 素質:生理不安定
+TALENT:160 , 素質:右腕
+TALENT:161 , 素質:左腕
+TALENT:162 , 素質:右脚
+TALENT:163 , 素質:左脚
+TALENT:164 , 素質:頭
+TALENT:165 , 素質:胴体
+TALENT:170 , 素質:長髪
 TALENT:998 , 素質:Debug(Master)
 TALENT:200 , 素質:難調教
 TALENT:201 , 素質:[ミクサ]
@@ -117,7 +127,7 @@ TALENT:210 , 素質:花鳥風月
 TALENT:211 , 素質:[ツクヨミ]
 TALENT:212 , 素質:癒しの唄
 TALENT:213 , 素質:[メロウ]
-TALENT:214 , 素質:[エピーヌ]
+TALENT:214 , 素質:朦朧の粉
 TALENT:233 , 素質:[吉備津彦]
 TALENT:234 , 素質:[闇吉備津]
 TALENT:235 , 素質:[ピーター]
@@ -179,6 +189,11 @@ EXP:30 , 経験:苦痛快楽経験
 EXP:40 , 経験:レズ経験
 EXP:41 , 経験:BL経験
 EXP:50 , 経験:異常経験
+EXP:60 , 経験:Ｃ精液経験
+EXP:61 , 経験:∨精液経験
+EXP:62 , 経験:Ａ精液経験
+EXP:63 , 経験:口精液経験
+EXP:64 , 経験:乳精液経験
 
 ;○道具へ変換
 ITEM:0 , 道具:ローター
@@ -186,11 +201,18 @@ ITEM:1 , 道具:バイブ
 ITEM:2 , 道具:Ｅマッサージャ
 ITEM:3 , 道具:アナルバイブ
 ITEM:4 , 道具:ペニスバンド
+ITEM:5 , 道具:Ａプラグ(猫尻尾)
+ITEM:6 , 道具:Ａプラグ(狐尻尾)
+ITEM:7 , 道具:膣鏡
 ITEM:10 , 道具:鞭
 ITEM:11 , 道具:針
 ITEM:12 , 道具:アロマポット
+ITEM:15 , 道具:いちぢく浣腸(未実装)
 ITEM:20 , 道具:ローション
 ITEM:21 , 道具:媚薬
+ITEM:22 , 道具:筋弛緩剤(未実装)
+ITEM:23 , 道具:筋肉収縮剤(未実装)
+ITEM:24 , 道具:淫核肥大化剤(未実装)
 ITEM:25 , 道具:アロマ(ローズ)
 ITEM:26 , 道具:アロマ(サイプレス)
 ITEM:27 , 道具:アロマ(ジャスミン)
@@ -201,6 +223,8 @@ ITEM:45 , 道具:ルナルナ
 ITEM:46 , 道具:発情チェッカ
 ITEM:50 , 道具:エンゲージリング
 ITEM:51 , 道具:ペアリング
+ITEM:90 , 道具:ローターＶ
+ITEM:91 , 道具:ローターＡ
 ITEM:101 , 道具:ミクサ
 ITEM:102 , 道具:リン
 ITEM:103 , 道具:リトル・アリス
@@ -267,17 +291,35 @@ TRAIN:32 , 調教:パイズリ
 TRAIN:33 , 調教:素股
 TRAIN:34 , 調教:騎乗位
 TRAIN:35 , 調教:ナイズリ
+TRAIN:36 , 調教:顔面騎乗
+TRAIN:37 , 調教:イラマチオ
 TRAIN:40 , 調教:スパンキング
 TRAIN:41 , 調教:鞭
 TRAIN:42 , 調教:針
 TRAIN:50 , 調教:ローション
 TRAIN:51 , 調教:媚薬
+TRAIN:55 , 調教:アロマ(ローズ)
+TRAIN:56 , 調教:アロマ(サイプレス)
+TRAIN:57 , 調教:アロマ(ジャスミン)
 TRAIN:60 , 調教:助手にキス
 TRAIN:61 , 調教:クンニ強制
 TRAIN:62 , 調教:シックスナイン
 TRAIN:65 , 調教:助手を犯す
 TRAIN:66 , 調教:Ｗフェラ
 TRAIN:70 , 調教:烙印を刻む
+TRAIN:80 , 調教:ローター∨挿入
+TRAIN:81 , 調教:ローターＡ挿入
+TRAIN:90 , 調教:足コキ
+TRAIN:91 , 調教:髪コキ
+TRAIN:92 , 調教:授乳手コキ
+TRAIN:93 , 調教:靴下コキ
+TRAIN:100 , 調教:豆弾き
+TRAIN:120 , 調教:膣鏡
+TRAIN:160 , 調教:∨おねだり
+TRAIN:161 , 調教:Ａおねだり
+TRAIN:200 , 調教:Ａプラグ(猫尻尾)
+TRAIN:201 , 調教:Ａプラグ(狐尻尾)
+TRAIN:210 , 調教:Ａプラグを引っ張る
 
 ;◆eramakerViewによる拡張項目
 ;●基礎パラへ変換
@@ -378,6 +420,8 @@ TALENTNAME:110 , 素質名称:巨乳
 TALENTNAME:111 , 素質名称:回復早い
 TALENTNAME:112 , 素質名称:回復遅い
 TALENTNAME:113 , 素質名称:魅力
+TALENTNAME:114 , 素質名称:貧乳
+TALENTNAME:115 , 素質名称:素足
 TALENTNAME:120 , 素質名称:不思議な根
 TALENTNAME:121 , 素質名称:ふたなり
 TALENTNAME:122 , 素質名称:オトコ
@@ -390,11 +434,19 @@ TALENTNAME:135 , 素質名称:淫核
 TALENTNAME:136 , 素質名称:魔壺
 TALENTNAME:137 , 素質名称:魔菊
 TALENTNAME:140 , 素質名称:オナホ
-TALENTNAME:150 , 素質名称:発情Lv1
-TALENTNAME:151 , 素質名称:発情Lv2
-TALENTNAME:152 , 素質名称:発情Lv3
+TALENTNAME:150 , 素質名称:発情可能(猫)
+TALENTNAME:151 , 素質名称:発情可能(魚)
 TALENTNAME:155 , 素質名称:生理重い
 TALENTNAME:156 , 素質名称:生理軽い
+TALENTNAME:157 , 素質名称:初経前
+TALENTNAME:158 , 素質名称:生理不安定
+TALENTNAME:160 , 素質名称:右腕
+TALENTNAME:161 , 素質名称:左腕
+TALENTNAME:162 , 素質名称:右脚
+TALENTNAME:163 , 素質名称:左脚
+TALENTNAME:164 , 素質名称:頭
+TALENTNAME:165 , 素質名称:胴体
+TALENTNAME:170 , 素質名称:長髪
 TALENTNAME:998 , 素質名称:Debug(Master)
 TALENTNAME:200 , 素質名称:難調教
 TALENTNAME:201 , 素質名称:[ミクサ]
@@ -410,7 +462,7 @@ TALENTNAME:210 , 素質名称:花鳥風月
 TALENTNAME:211 , 素質名称:[ツクヨミ]
 TALENTNAME:212 , 素質名称:癒しの唄
 TALENTNAME:213 , 素質名称:[メロウ]
-TALENTNAME:214 , 素質名称:[エピーヌ]
+TALENTNAME:214 , 素質名称:朦朧の粉
 TALENTNAME:233 , 素質名称:[吉備津彦]
 TALENTNAME:234 , 素質名称:[闇吉備津]
 TALENTNAME:235 , 素質名称:[ピーター]
@@ -501,6 +553,8 @@ TALENT:PLAYER:110 , 素質:調教者:巨乳
 TALENT:PLAYER:111 , 素質:調教者:回復早い
 TALENT:PLAYER:112 , 素質:調教者:回復遅い
 TALENT:PLAYER:113 , 素質:調教者:魅力
+TALENT:PLAYER:114 , 素質:調教者:貧乳
+TALENT:PLAYER:115 , 素質:調教者:素足
 TALENT:PLAYER:120 , 素質:調教者:不思議な根
 TALENT:PLAYER:121 , 素質:調教者:ふたなり
 TALENT:PLAYER:122 , 素質:調教者:オトコ
@@ -513,11 +567,19 @@ TALENT:PLAYER:135 , 素質:調教者:淫核
 TALENT:PLAYER:136 , 素質:調教者:魔壺
 TALENT:PLAYER:137 , 素質:調教者:魔菊
 TALENT:PLAYER:140 , 素質:調教者:オナホ
-TALENT:PLAYER:150 , 素質:調教者:発情Lv1
-TALENT:PLAYER:151 , 素質:調教者:発情Lv2
-TALENT:PLAYER:152 , 素質:調教者:発情Lv3
+TALENT:PLAYER:150 , 素質:調教者:発情可能(猫)
+TALENT:PLAYER:151 , 素質:調教者:発情可能(魚)
 TALENT:PLAYER:155 , 素質:調教者:生理重い
 TALENT:PLAYER:156 , 素質:調教者:生理軽い
+TALENT:PLAYER:157 , 素質:調教者:初経前
+TALENT:PLAYER:158 , 素質:調教者:生理不安定
+TALENT:PLAYER:160 , 素質:調教者:右腕
+TALENT:PLAYER:161 , 素質:調教者:左腕
+TALENT:PLAYER:162 , 素質:調教者:右脚
+TALENT:PLAYER:163 , 素質:調教者:左脚
+TALENT:PLAYER:164 , 素質:調教者:頭
+TALENT:PLAYER:165 , 素質:調教者:胴体
+TALENT:PLAYER:170 , 素質:調教者:長髪
 TALENT:PLAYER:998 , 素質:調教者:Debug(Master)
 TALENT:PLAYER:200 , 素質:調教者:難調教
 TALENT:PLAYER:201 , 素質:調教者:[ミクサ]
@@ -533,7 +595,7 @@ TALENT:PLAYER:210 , 素質:調教者:花鳥風月
 TALENT:PLAYER:211 , 素質:調教者:[ツクヨミ]
 TALENT:PLAYER:212 , 素質:調教者:癒しの唄
 TALENT:PLAYER:213 , 素質:調教者:[メロウ]
-TALENT:PLAYER:214 , 素質:調教者:[エピーヌ]
+TALENT:PLAYER:214 , 素質:調教者:朦朧の粉
 TALENT:PLAYER:233 , 素質:調教者:[吉備津彦]
 TALENT:PLAYER:234 , 素質:調教者:[闇吉備津]
 TALENT:PLAYER:235 , 素質:調教者:[ピーター]
@@ -624,6 +686,8 @@ TALENT:MASTER:110 , 素質:主人:巨乳
 TALENT:MASTER:111 , 素質:主人:回復早い
 TALENT:MASTER:112 , 素質:主人:回復遅い
 TALENT:MASTER:113 , 素質:主人:魅力
+TALENT:MASTER:114 , 素質:主人:貧乳
+TALENT:MASTER:115 , 素質:主人:素足
 TALENT:MASTER:120 , 素質:主人:不思議な根
 TALENT:MASTER:121 , 素質:主人:ふたなり
 TALENT:MASTER:122 , 素質:主人:オトコ
@@ -636,11 +700,19 @@ TALENT:MASTER:135 , 素質:主人:淫核
 TALENT:MASTER:136 , 素質:主人:魔壺
 TALENT:MASTER:137 , 素質:主人:魔菊
 TALENT:MASTER:140 , 素質:主人:オナホ
-TALENT:MASTER:150 , 素質:主人:発情Lv1
-TALENT:MASTER:151 , 素質:主人:発情Lv2
-TALENT:MASTER:152 , 素質:主人:発情Lv3
+TALENT:MASTER:150 , 素質:主人:発情可能(猫)
+TALENT:MASTER:151 , 素質:主人:発情可能(魚)
 TALENT:MASTER:155 , 素質:主人:生理重い
 TALENT:MASTER:156 , 素質:主人:生理軽い
+TALENT:MASTER:157 , 素質:主人:初経前
+TALENT:MASTER:158 , 素質:主人:生理不安定
+TALENT:MASTER:160 , 素質:主人:右腕
+TALENT:MASTER:161 , 素質:主人:左腕
+TALENT:MASTER:162 , 素質:主人:右脚
+TALENT:MASTER:163 , 素質:主人:左脚
+TALENT:MASTER:164 , 素質:主人:頭
+TALENT:MASTER:165 , 素質:主人:胴体
+TALENT:MASTER:170 , 素質:主人:長髪
 TALENT:MASTER:998 , 素質:主人:Debug(Master)
 TALENT:MASTER:200 , 素質:主人:難調教
 TALENT:MASTER:201 , 素質:主人:[ミクサ]
@@ -656,7 +728,7 @@ TALENT:MASTER:210 , 素質:主人:花鳥風月
 TALENT:MASTER:211 , 素質:主人:[ツクヨミ]
 TALENT:MASTER:212 , 素質:主人:癒しの唄
 TALENT:MASTER:213 , 素質:主人:[メロウ]
-TALENT:MASTER:214 , 素質:主人:[エピーヌ]
+TALENT:MASTER:214 , 素質:主人:朦朧の粉
 TALENT:MASTER:233 , 素質:主人:[吉備津彦]
 TALENT:MASTER:234 , 素質:主人:[闇吉備津]
 TALENT:MASTER:235 , 素質:主人:[ピーター]
@@ -747,6 +819,8 @@ TALENT:ASSI:110 , 素質:助手:巨乳
 TALENT:ASSI:111 , 素質:助手:回復早い
 TALENT:ASSI:112 , 素質:助手:回復遅い
 TALENT:ASSI:113 , 素質:助手:魅力
+TALENT:ASSI:114 , 素質:助手:貧乳
+TALENT:ASSI:115 , 素質:助手:素足
 TALENT:ASSI:120 , 素質:助手:不思議な根
 TALENT:ASSI:121 , 素質:助手:ふたなり
 TALENT:ASSI:122 , 素質:助手:オトコ
@@ -759,11 +833,19 @@ TALENT:ASSI:135 , 素質:助手:淫核
 TALENT:ASSI:136 , 素質:助手:魔壺
 TALENT:ASSI:137 , 素質:助手:魔菊
 TALENT:ASSI:140 , 素質:助手:オナホ
-TALENT:ASSI:150 , 素質:助手:発情Lv1
-TALENT:ASSI:151 , 素質:助手:発情Lv2
-TALENT:ASSI:152 , 素質:助手:発情Lv3
+TALENT:ASSI:150 , 素質:助手:発情可能(猫)
+TALENT:ASSI:151 , 素質:助手:発情可能(魚)
 TALENT:ASSI:155 , 素質:助手:生理重い
 TALENT:ASSI:156 , 素質:助手:生理軽い
+TALENT:ASSI:157 , 素質:助手:初経前
+TALENT:ASSI:158 , 素質:助手:生理不安定
+TALENT:ASSI:160 , 素質:助手:右腕
+TALENT:ASSI:161 , 素質:助手:左腕
+TALENT:ASSI:162 , 素質:助手:右脚
+TALENT:ASSI:163 , 素質:助手:左脚
+TALENT:ASSI:164 , 素質:助手:頭
+TALENT:ASSI:165 , 素質:助手:胴体
+TALENT:ASSI:170 , 素質:助手:長髪
 TALENT:ASSI:998 , 素質:助手:Debug(Master)
 TALENT:ASSI:200 , 素質:助手:難調教
 TALENT:ASSI:201 , 素質:助手:[ミクサ]
@@ -779,7 +861,7 @@ TALENT:ASSI:210 , 素質:助手:花鳥風月
 TALENT:ASSI:211 , 素質:助手:[ツクヨミ]
 TALENT:ASSI:212 , 素質:助手:癒しの唄
 TALENT:ASSI:213 , 素質:助手:[メロウ]
-TALENT:ASSI:214 , 素質:助手:[エピーヌ]
+TALENT:ASSI:214 , 素質:助手:朦朧の粉
 TALENT:ASSI:233 , 素質:助手:[吉備津彦]
 TALENT:ASSI:234 , 素質:助手:[闇吉備津]
 TALENT:ASSI:235 , 素質:助手:[ピーター]
@@ -870,6 +952,8 @@ TALENT:TARGET:110 , 素質:奴隷:巨乳
 TALENT:TARGET:111 , 素質:奴隷:回復早い
 TALENT:TARGET:112 , 素質:奴隷:回復遅い
 TALENT:TARGET:113 , 素質:奴隷:魅力
+TALENT:TARGET:114 , 素質:奴隷:貧乳
+TALENT:TARGET:115 , 素質:奴隷:素足
 TALENT:TARGET:120 , 素質:奴隷:不思議な根
 TALENT:TARGET:121 , 素質:奴隷:ふたなり
 TALENT:TARGET:122 , 素質:奴隷:オトコ
@@ -882,11 +966,19 @@ TALENT:TARGET:135 , 素質:奴隷:淫核
 TALENT:TARGET:136 , 素質:奴隷:魔壺
 TALENT:TARGET:137 , 素質:奴隷:魔菊
 TALENT:TARGET:140 , 素質:奴隷:オナホ
-TALENT:TARGET:150 , 素質:奴隷:発情Lv1
-TALENT:TARGET:151 , 素質:奴隷:発情Lv2
-TALENT:TARGET:152 , 素質:奴隷:発情Lv3
+TALENT:TARGET:150 , 素質:奴隷:発情可能(猫)
+TALENT:TARGET:151 , 素質:奴隷:発情可能(魚)
 TALENT:TARGET:155 , 素質:奴隷:生理重い
 TALENT:TARGET:156 , 素質:奴隷:生理軽い
+TALENT:TARGET:157 , 素質:奴隷:初経前
+TALENT:TARGET:158 , 素質:奴隷:生理不安定
+TALENT:TARGET:160 , 素質:奴隷:右腕
+TALENT:TARGET:161 , 素質:奴隷:左腕
+TALENT:TARGET:162 , 素質:奴隷:右脚
+TALENT:TARGET:163 , 素質:奴隷:左脚
+TALENT:TARGET:164 , 素質:奴隷:頭
+TALENT:TARGET:165 , 素質:奴隷:胴体
+TALENT:TARGET:170 , 素質:奴隷:長髪
 TALENT:TARGET:998 , 素質:奴隷:Debug(Master)
 TALENT:TARGET:200 , 素質:奴隷:難調教
 TALENT:TARGET:201 , 素質:奴隷:[ミクサ]
@@ -902,7 +994,7 @@ TALENT:TARGET:210 , 素質:奴隷:花鳥風月
 TALENT:TARGET:211 , 素質:奴隷:[ツクヨミ]
 TALENT:TARGET:212 , 素質:奴隷:癒しの唄
 TALENT:TARGET:213 , 素質:奴隷:[メロウ]
-TALENT:TARGET:214 , 素質:奴隷:[エピーヌ]
+TALENT:TARGET:214 , 素質:奴隷:朦朧の粉
 TALENT:TARGET:233 , 素質:奴隷:[吉備津彦]
 TALENT:TARGET:234 , 素質:奴隷:[闇吉備津]
 TALENT:TARGET:235 , 素質:奴隷:[ピーター]
@@ -1028,6 +1120,11 @@ EXPNAME:30 , 経験名称:苦痛快楽経験
 EXPNAME:40 , 経験名称:レズ経験
 EXPNAME:41 , 経験名称:BL経験
 EXPNAME:50 , 経験名称:異常経験
+EXPNAME:60 , 経験名称:Ｃ精液経験
+EXPNAME:61 , 経験名称:∨精液経験
+EXPNAME:62 , 経験名称:Ａ精液経験
+EXPNAME:63 , 経験名称:口精液経験
+EXPNAME:64 , 経験名称:乳精液経験
 
 ;●経験:調教者へ変換
 EXP:PLAYER:0 , 経験:調教者:Ｖ経験
@@ -1043,6 +1140,11 @@ EXP:PLAYER:30 , 経験:調教者:苦痛快楽経験
 EXP:PLAYER:40 , 経験:調教者:レズ経験
 EXP:PLAYER:41 , 経験:調教者:BL経験
 EXP:PLAYER:50 , 経験:調教者:異常経験
+EXP:PLAYER:60 , 経験:調教者:Ｃ精液経験
+EXP:PLAYER:61 , 経験:調教者:∨精液経験
+EXP:PLAYER:62 , 経験:調教者:Ａ精液経験
+EXP:PLAYER:63 , 経験:調教者:口精液経験
+EXP:PLAYER:64 , 経験:調教者:乳精液経験
 
 ;●経験:主人へ変換
 EXP:MASTER:0 , 経験:主人:Ｖ経験
@@ -1058,6 +1160,11 @@ EXP:MASTER:30 , 経験:主人:苦痛快楽経験
 EXP:MASTER:40 , 経験:主人:レズ経験
 EXP:MASTER:41 , 経験:主人:BL経験
 EXP:MASTER:50 , 経験:主人:異常経験
+EXP:MASTER:60 , 経験:主人:Ｃ精液経験
+EXP:MASTER:61 , 経験:主人:∨精液経験
+EXP:MASTER:62 , 経験:主人:Ａ精液経験
+EXP:MASTER:63 , 経験:主人:口精液経験
+EXP:MASTER:64 , 経験:主人:乳精液経験
 
 ;●経験:助手へ変換
 EXP:ASSI:0 , 経験:助手:Ｖ経験
@@ -1073,6 +1180,11 @@ EXP:ASSI:30 , 経験:助手:苦痛快楽経験
 EXP:ASSI:40 , 経験:助手:レズ経験
 EXP:ASSI:41 , 経験:助手:BL経験
 EXP:ASSI:50 , 経験:助手:異常経験
+EXP:ASSI:60 , 経験:助手:Ｃ精液経験
+EXP:ASSI:61 , 経験:助手:∨精液経験
+EXP:ASSI:62 , 経験:助手:Ａ精液経験
+EXP:ASSI:63 , 経験:助手:口精液経験
+EXP:ASSI:64 , 経験:助手:乳精液経験
 
 ;●経験:奴隷へ変換
 EXP:TARGET:0 , 経験:奴隷:Ｖ経験
@@ -1088,6 +1200,11 @@ EXP:TARGET:30 , 経験:奴隷:苦痛快楽経験
 EXP:TARGET:40 , 経験:奴隷:レズ経験
 EXP:TARGET:41 , 経験:奴隷:BL経験
 EXP:TARGET:50 , 経験:奴隷:異常経験
+EXP:TARGET:60 , 経験:奴隷:Ｃ精液経験
+EXP:TARGET:61 , 経験:奴隷:∨精液経験
+EXP:TARGET:62 , 経験:奴隷:Ａ精液経験
+EXP:TARGET:63 , 経験:奴隷:口精液経験
+EXP:TARGET:64 , 経験:奴隷:乳精液経験
 
 ;●道具名称へ変換
 ITEMNAME:0 , 道具名称:ローター
@@ -1095,11 +1212,18 @@ ITEMNAME:1 , 道具名称:バイブ
 ITEMNAME:2 , 道具名称:Ｅマッサージャ
 ITEMNAME:3 , 道具名称:アナルバイブ
 ITEMNAME:4 , 道具名称:ペニスバンド
+ITEMNAME:5 , 道具名称:Ａプラグ(猫尻尾)
+ITEMNAME:6 , 道具名称:Ａプラグ(狐尻尾)
+ITEMNAME:7 , 道具名称:膣鏡
 ITEMNAME:10 , 道具名称:鞭
 ITEMNAME:11 , 道具名称:針
 ITEMNAME:12 , 道具名称:アロマポット
+ITEMNAME:15 , 道具名称:いちぢく浣腸(未実装)
 ITEMNAME:20 , 道具名称:ローション
 ITEMNAME:21 , 道具名称:媚薬
+ITEMNAME:22 , 道具名称:筋弛緩剤(未実装)
+ITEMNAME:23 , 道具名称:筋肉収縮剤(未実装)
+ITEMNAME:24 , 道具名称:淫核肥大化剤(未実装)
 ITEMNAME:25 , 道具名称:アロマ(ローズ)
 ITEMNAME:26 , 道具名称:アロマ(サイプレス)
 ITEMNAME:27 , 道具名称:アロマ(ジャスミン)
@@ -1110,6 +1234,8 @@ ITEMNAME:45 , 道具名称:ルナルナ
 ITEMNAME:46 , 道具名称:発情チェッカ
 ITEMNAME:50 , 道具名称:エンゲージリング
 ITEMNAME:51 , 道具名称:ペアリング
+ITEMNAME:90 , 道具名称:ローターＶ
+ITEMNAME:91 , 道具名称:ローターＡ
 ITEMNAME:101 , 道具名称:ミクサ
 ITEMNAME:102 , 道具名称:リン
 ITEMNAME:103 , 道具名称:リトル・アリス
@@ -1140,11 +1266,18 @@ TEQUIP:1 , 道具使用中:バイブ
 TEQUIP:2 , 道具使用中:Ｅマッサージャ
 TEQUIP:3 , 道具使用中:アナルバイブ
 TEQUIP:4 , 道具使用中:ペニスバンド
+TEQUIP:5 , 道具使用中:Ａプラグ(猫尻尾)
+TEQUIP:6 , 道具使用中:Ａプラグ(狐尻尾)
+TEQUIP:7 , 道具使用中:膣鏡
 TEQUIP:10 , 道具使用中:鞭
 TEQUIP:11 , 道具使用中:針
 TEQUIP:12 , 道具使用中:アロマポット
+TEQUIP:15 , 道具使用中:いちぢく浣腸(未実装)
 TEQUIP:20 , 道具使用中:ローション
 TEQUIP:21 , 道具使用中:媚薬
+TEQUIP:22 , 道具使用中:筋弛緩剤(未実装)
+TEQUIP:23 , 道具使用中:筋肉収縮剤(未実装)
+TEQUIP:24 , 道具使用中:淫核肥大化剤(未実装)
 TEQUIP:25 , 道具使用中:アロマ(ローズ)
 TEQUIP:26 , 道具使用中:アロマ(サイプレス)
 TEQUIP:27 , 道具使用中:アロマ(ジャスミン)
@@ -1155,6 +1288,8 @@ TEQUIP:45 , 道具使用中:ルナルナ
 TEQUIP:46 , 道具使用中:発情チェッカ
 TEQUIP:50 , 道具使用中:エンゲージリング
 TEQUIP:51 , 道具使用中:ペアリング
+TEQUIP:90 , 道具使用中:ローターＶ
+TEQUIP:91 , 道具使用中:ローターＡ
 TEQUIP:101 , 道具使用中:ミクサ
 TEQUIP:102 , 道具使用中:リン
 TEQUIP:103 , 道具使用中:リトル・アリス
@@ -1185,11 +1320,18 @@ ITEMSALES:1 , 道具販売中:バイブ
 ITEMSALES:2 , 道具販売中:Ｅマッサージャ
 ITEMSALES:3 , 道具販売中:アナルバイブ
 ITEMSALES:4 , 道具販売中:ペニスバンド
+ITEMSALES:5 , 道具販売中:Ａプラグ(猫尻尾)
+ITEMSALES:6 , 道具販売中:Ａプラグ(狐尻尾)
+ITEMSALES:7 , 道具販売中:膣鏡
 ITEMSALES:10 , 道具販売中:鞭
 ITEMSALES:11 , 道具販売中:針
 ITEMSALES:12 , 道具販売中:アロマポット
+ITEMSALES:15 , 道具販売中:いちぢく浣腸(未実装)
 ITEMSALES:20 , 道具販売中:ローション
 ITEMSALES:21 , 道具販売中:媚薬
+ITEMSALES:22 , 道具販売中:筋弛緩剤(未実装)
+ITEMSALES:23 , 道具販売中:筋肉収縮剤(未実装)
+ITEMSALES:24 , 道具販売中:淫核肥大化剤(未実装)
 ITEMSALES:25 , 道具販売中:アロマ(ローズ)
 ITEMSALES:26 , 道具販売中:アロマ(サイプレス)
 ITEMSALES:27 , 道具販売中:アロマ(ジャスミン)
@@ -1200,6 +1342,8 @@ ITEMSALES:45 , 道具販売中:ルナルナ
 ITEMSALES:46 , 道具販売中:発情チェッカ
 ITEMSALES:50 , 道具販売中:エンゲージリング
 ITEMSALES:51 , 道具販売中:ペアリング
+ITEMSALES:90 , 道具販売中:ローターＶ
+ITEMSALES:91 , 道具販売中:ローターＡ
 ITEMSALES:101 , 道具販売中:ミクサ
 ITEMSALES:102 , 道具販売中:リン
 ITEMSALES:103 , 道具販売中:リトル・アリス
@@ -1374,9 +1518,9 @@ DOWN:13 , パラ下降:抑鬱
 DOWN:100 , パラ下降:否定
 
 ;●根源へ変換
-SOURCE:0 , 根源:快ｃ
-SOURCE:1 , 根源:快ｖ
-SOURCE:2 , 根源:快ａ
+SOURCE:0 , 根源:快Ｃ
+SOURCE:1 , 根源:快∨
+SOURCE:2 , 根源:快Ａ
 SOURCE:3 , 根源:情愛
 SOURCE:4 , 根源:性行動
 SOURCE:5 , 根源:達成感
@@ -1390,7 +1534,6 @@ SOURCE:12 , 根源:露出
 SOURCE:13 , 根源:屈従
 SOURCE:14 , 根源:逸脱
 SOURCE:15 , 根源:反感追加
-SOURCE:17 , 根源:快Ｂ
 
 ;●通算絶頂回数へ変換
 EX:0 , 通算絶頂回数:Ｃ絶頂
@@ -1411,6 +1554,7 @@ STAIN:2 , 汚れ:ペニス
 STAIN:3 , 汚れ:ヴァギナ
 STAIN:4 , 汚れ:アナル
 STAIN:5 , 汚れ:胸
+STAIN:6 , 汚れ:足
 
 ;●汚れ:調教者へ変換
 STAIN:PLAYER:0 , 汚れ:調教者:口
@@ -1419,6 +1563,7 @@ STAIN:PLAYER:2 , 汚れ:調教者:ペニス
 STAIN:PLAYER:3 , 汚れ:調教者:ヴァギナ
 STAIN:PLAYER:4 , 汚れ:調教者:アナル
 STAIN:PLAYER:5 , 汚れ:調教者:胸
+STAIN:PLAYER:6 , 汚れ:調教者:足
 
 ;●汚れ:主人へ変換
 STAIN:MASTER:0 , 汚れ:主人:口
@@ -1427,6 +1572,7 @@ STAIN:MASTER:2 , 汚れ:主人:ペニス
 STAIN:MASTER:3 , 汚れ:主人:ヴァギナ
 STAIN:MASTER:4 , 汚れ:主人:アナル
 STAIN:MASTER:5 , 汚れ:主人:胸
+STAIN:MASTER:6 , 汚れ:主人:足
 
 ;●汚れ:助手へ変換
 STAIN:ASSI:0 , 汚れ:助手:口
@@ -1435,6 +1581,7 @@ STAIN:ASSI:2 , 汚れ:助手:ペニス
 STAIN:ASSI:3 , 汚れ:助手:ヴァギナ
 STAIN:ASSI:4 , 汚れ:助手:アナル
 STAIN:ASSI:5 , 汚れ:助手:胸
+STAIN:ASSI:6 , 汚れ:助手:足
 
 ;●汚れ:奴隷へ変換
 STAIN:TARGET:0 , 汚れ:奴隷:口
@@ -1443,4 +1590,5 @@ STAIN:TARGET:2 , 汚れ:奴隷:ペニス
 STAIN:TARGET:3 , 汚れ:奴隷:ヴァギナ
 STAIN:TARGET:4 , 汚れ:奴隷:アナル
 STAIN:TARGET:5 , 汚れ:奴隷:胸
+STAIN:TARGET:6 , 汚れ:奴隷:足
 

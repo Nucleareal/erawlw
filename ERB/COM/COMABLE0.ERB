@@ -118,9 +118,15 @@ RETURN 1
 
 @COM_ABLE20
 ;正常位実行判定
+
 ;バイブ挿入中はダメ
 SIF TEQUIP:1
 	RETURN 0
+	
+;膣鏡挿入中はダメ
+SIF TEQUIP:7
+	RETURN 0
+	
 ;オトコだとダメ
 SIF TALENT:122
 	RETURN 0

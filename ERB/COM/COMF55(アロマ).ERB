@@ -1,0 +1,70 @@
+@COM55
+TSTR:0 = アロマ(ローズ)
+CALL DISPLAY_KOJO_TRAIN_MESSAGE_F_COM
+
+;気分を落ち着かせるアロマ(主にマイナスパラメータの減少)
+
+;アロマによる体力/気力の減少
+LOSEBASE:0 += 30
+LOSEBASE:1 += 30
+
+;逸脱
+SOURCE:14 = 200
+
+;反感10, 不快20, 抑鬱10低下
+DOWN:11 = 100
+DOWN:12 = 200
+DOWN:13 = 100
+
+;薬毒耐性
+IF TALENT:44
+	TIMES DOWN:11 , 0.5
+	TIMES DOWN:12 , 0.5
+	TIMES DOWN:13 , 0.5
+ENDIF
+
+ITEM:25 -= 1
+;ポットを使用中にする
+TEQUIP:12 = 1
+;ローズを使用中にする
+TEQUIP:25 = 1
+
+IF TALENT:122 == 0 && TALENT:PLAYER:122 == 0
+	PRINTS EXPNAME:40
+	PRINTL +1
+	EXP:40 += 1
+
+	SIF PLAYER != MASTER
+		EXP:PLAYER:40 += 1
+
+ELSEIF TALENT:122 == 1 && TALENT:PLAYER:122 == 1
+	PRINTS EXPNAME:41
+	PRINTL +1
+	EXP:41 += 1
+ENDIF
+
+RETURN 1
+
+@EQUIP_COM55
+DEBUGPRINTL アロマ(ローズ)A
+
+@EQUIP_COM25
+DEBUGPRINTL アロマ(ローズ)B
+;アロマ(ローズ)中
+
+PRINTL ＜アロマ(ローズ)＞
+
+;逸脱
+SOURCE:14 = 200
+
+;反感10, 不快20, 抑鬱10低下
+DOWN:11 = 100
+DOWN:12 = 200
+DOWN:13 = 100
+
+;薬毒耐性
+IF TALENT:44
+	TIMES DOWN:11 , 0.5
+	TIMES DOWN:12 , 0.5
+	TIMES DOWN:13 , 0.5
+ENDIF

@@ -2,6 +2,11 @@
 #LATER
 PRINTL 調教を終了しました。
 
+;調教を誰で終えたかのチェック
+IF PLAYER == MASTER
+	LASTASSI = -2
+ENDIF
+
 ;調教後行為のチェック
 CALL SELF_CHECK
 
